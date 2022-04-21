@@ -38,6 +38,7 @@ let package = Package(
         .executableTarget(
             name: "AppModule",
             path: ".",
+            exclude: ["README.md"],
             resources: [
                 .process("Resources")
             ]
