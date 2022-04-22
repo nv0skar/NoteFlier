@@ -47,10 +47,10 @@ class Playground: SKScene {
     }
     
     override func didSimulatePhysics() {
-        let playerTrueWidth = (abs(playerShadow.frame.width-player.frame.width)+player.frame.width)
-        let playerTrueHeight = (abs(playerShadow.frame.height-player.frame.height)+player.frame.height)
+        let playerTrueWidth = (abs((playerShadow.frame.width*(((self.view?.frame.width)! <= 512) ? 0.55:0.8))-player.frame.width)+player.frame.width)
+        let playerTrueHeight = (abs((playerShadow.frame.height*(((self.view?.frame.width)! <= 512) ? 0.55:0.8))-player.frame.height)+player.frame.height)
         if (((player.position.x-(playerTrueWidth/2))) <= 0) || ((player.position.x+(playerTrueWidth/2)) >= (self.scene?.size.width)!) {
-            let newPosition = ((((player.position.x-(playerTrueWidth/2))) < 0) ? (playerTrueWidth/2):((self.scene?.size.width)!-(playerTrueWidth/2)))
+            let newPosition = ((((player.position.x-(playerTrueWidth/2))) <= 0) ? (playerTrueWidth/2):((self.scene?.size.width)!-(playerTrueWidth/2)))
             (player.position.x, playerParticle!.position.x) = (newPosition, (abs(player.position.x-playerParticle!.position.x) > 1) ? 0:newPosition)
             (player.zRotation, playerParticle!.zRotation) = (0, 0)
         } else if (CGVector(dx: (player.physicsBody?.velocity.dx)!.rounded(.towardZero), dy: 0) == CGVector(dx: 0, dy: 0)) || (((player.position.x-((sqrt(pow(playerTrueWidth, 2)+pow(playerTrueHeight, 2)))/2))) <= 0) || ((player.position.x+((sqrt(pow(playerTrueWidth, 2)+pow(playerTrueHeight, 2)))/2)) >= (self.scene?.size.width)!) {
@@ -97,7 +97,7 @@ class Playground: SKScene {
         localObstacle.setScale((((self.view?.frame.width)! <= 512) ? 0.55:0.8))
         localObstacle.lightingBitMask = 0x1
         localObstacle.shadowCastBitMask = 0x1
-        localObstaclesShadow.size = CGSize(width: (localObstacle.size.width*2), height: (localObstacle.size.height*2))
+        localObstaclesShadow.size = CGSize(width: (localObstacle.size.width*(((self.view?.frame.width)! <= 512) ? 2.25:1.5)), height: (localObstacle.size.height*(((self.view?.frame.width)! <= 512) ? 2.25:1.5)))
         localObstaclesShadow.zPosition = -1
         localObstaclesShadow.alpha = 0.75
         localObstacle.run(SKAction.moveTo(y: (-obstacle.frame.height), duration: TimeInterval((((self.scene?.size.height)!/1228)*CGFloat.random(in: (4.5)...(4.75))))))
@@ -145,7 +145,7 @@ class Playground: SKScene {
         player.zPosition = 2
         applyPhysics(object: player)
         addLight(parent: player)
-        playerShadow.size = CGSize(width: (player.size.width*2), height: (player.size.height*2))
+        playerShadow.size = CGSize(width: (player.size.width*(((self.view?.frame.width)! <= 512) ? 2.25:1.5)), height: (player.size.height*(((self.view?.frame.width)! <= 512) ? 2.25:1.5)))
         playerShadow.zPosition = -1
         playerShadow.alpha = 0.75
         player.addChild(playerShadow)
