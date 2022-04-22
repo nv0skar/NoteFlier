@@ -5,6 +5,8 @@ import AVFoundation
 
 class Audio {
     static let twoPi = (2*Float.pi)
+    static let maxFrequency: Float = 440
+    static let minFrequency: Float = 20.6
     
     public struct waves {
         static let sine = { (phase: Float) -> Float in
@@ -101,7 +103,7 @@ class Audio {
     }
     
     public func setFrequency(_ freq: Float) {
-        frequency = freq
+        frequency = (((freq<Audio.minFrequency) ? Audio.minFrequency:((freq>Audio.maxFrequency) ? Audio.maxFrequency:freq))+abs(Audio.maxFrequency-Audio.minFrequency))
     }
     
     public func setAmplitude(_ ampl: Float) {

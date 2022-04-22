@@ -98,7 +98,6 @@ class Playground: SKScene {
         localObstacle.lightingBitMask = 0x1
         localObstacle.shadowCastBitMask = 0x1
         localObstaclesShadow.size = CGSize(width: (localObstacle.size.width*2), height: (localObstacle.size.height*2))
-        localObstaclesShadow.setScale((((self.view?.frame.width)! <= 512) ? 0.55:0.8))
         localObstaclesShadow.zPosition = -1
         localObstaclesShadow.alpha = 0.75
         localObstacle.run(SKAction.moveTo(y: (-obstacle.frame.height), duration: TimeInterval((((self.scene?.size.height)!/1228)*CGFloat.random(in: (4.5)...(4.75))))))
@@ -111,11 +110,9 @@ class Playground: SKScene {
         guard let _ = self.view else { return }
         player.position = CGPoint(x: player.position.x, y: (((self.view?.frame.width)! <= 512) ? ((self.view?.frame.midY)!*0.45):((self.view?.frame.midY)!*0.75)))
         player.setScale((((self.view?.frame.width)! <= 512) ? 0.55:0.8))
-        playerShadow.setScale((((self.view?.frame.width)! <= 512) ? 0.55:0.8))
         playerParticle!.setScale((((self.view?.frame.width)! <= 512) ? 0.55:0.8))
         for obstacle in spawnedObstacles {
             obstacle.setScale((((self.view?.frame.width)! <= 512) ? 0.55:0.8))
-            obstacle.children[0].setScale((((self.view?.frame.width)! <= 512) ? 0.55:0.8))
         }
     }
     
@@ -149,7 +146,6 @@ class Playground: SKScene {
         applyPhysics(object: player)
         addLight(parent: player)
         playerShadow.size = CGSize(width: (player.size.width*2), height: (player.size.height*2))
-        playerShadow.setScale((((self.view?.frame.width)! <= 512) ? 0.55:0.8))
         playerShadow.zPosition = -1
         playerShadow.alpha = 0.75
         player.addChild(playerShadow)
@@ -182,7 +178,7 @@ class Playground: SKScene {
     }
     
     private func setFrequency(_ xAxisOffset: CGFloat) {
-        engine.setFrequency((Float(xAxisOffset)*(600/Float((self.scene?.frame.width)!))))
+        engine.setFrequency((Float(xAxisOffset)*(Float(abs(Audio.maxFrequency-Audio.minFrequency))/Float((self.scene?.frame.width)!))))
     }
     
     private func setWave(_ waveType: @escaping (Float) -> Float) {
@@ -292,7 +288,7 @@ class Playground: SKScene {
         checkIfObstacleIsOutOfView()
         if let move = touchPos {
             if isTouchCompliant(touch: move, position: player.position, size: player.size) {
-                setFrequency(player.position.x)
+                setFrequency(move.x)
             }
         }
     }
