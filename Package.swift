@@ -34,9 +34,23 @@ let package = Package(
             ]
         )
     ],
+    dependencies: [
+        .package(url: "https://github.com/maustinstar/shiny.git", .branch("master")),
+        .package(url: "https://github.com/omaralbeik/Drops.git", "1.0.0"..<"2.0.0"),
+        .package(url: "https://github.com/nerdsupremacist/FancyScrollView.git", "0.1.4"..<"1.0.0"),
+        .package(url: "https://github.com/nerdsupremacist/Snap.git", "0.2.2"..<"1.0.0"),
+        .package(url: "https://github.com/SwiftUI-Plus/Presentation.git", "1.0.0"..<"2.0.0")
+    ],
     targets: [
         .executableTarget(
             name: "AppModule",
+            dependencies: [
+                .product(name: "Shiny", package: "shiny"),
+                .product(name: "Drops", package: "drops"),
+                .product(name: "FancyScrollView", package: "fancyscrollview"),
+                .product(name: "Snap", package: "snap"),
+                .product(name: "Presentation", package: "presentation")
+            ],
             path: ".",
             exclude: ["README.md"],
             resources: [

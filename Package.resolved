@@ -1,0 +1,52 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "Drops",
+        "repositoryURL": "https://github.com/omaralbeik/Drops.git",
+        "state": {
+          "branch": null,
+          "revision": "6b92e725fd2cc392d8fac29270751d1fa8e3480b",
+          "version": "1.4.0"
+        }
+      },
+      {
+        "package": "FancyScrollView",
+        "repositoryURL": "https://github.com/nerdsupremacist/FancyScrollView.git",
+        "state": {
+          "branch": null,
+          "revision": "7f8194b23dc209cdb5b0ebc9799a8de487166fdf",
+          "version": "0.1.4"
+        }
+      },
+      {
+        "package": "Presentation",
+        "repositoryURL": "https://github.com/SwiftUI-Plus/Presentation.git",
+        "state": {
+          "branch": null,
+          "revision": "d3c31bf2e5bd834ac4624b6629849232ffb83f2c",
+          "version": "1.3.0"
+        }
+      },
+      {
+        "package": "Shiny",
+        "repositoryURL": "https://github.com/maustinstar/shiny.git",
+        "state": {
+          "branch": "master",
+          "revision": "862360b8ab6b9ea9eb1156569a30f154b22625a5",
+          "version": null
+        }
+      },
+      {
+        "package": "Snap",
+        "repositoryURL": "https://github.com/nerdsupremacist/Snap.git",
+        "state": {
+          "branch": null,
+          "revision": "29943b7064547f391ea8352dea04903e2263d831",
+          "version": "0.2.2"
+        }
+      }
+    ]
+  },
+  "version": 1
+}
