@@ -11,6 +11,8 @@ class Playground: SKScene {
     
     private let obstacle = SKSpriteNode(imageNamed: "Obstacle")
     private let obstacleShadow = SKSpriteNode(imageNamed: "ObstacleGlow")
+    
+    private let background = SKNode()
         
     private let engine = Audio()
         
@@ -23,6 +25,8 @@ class Playground: SKScene {
     private var spawnedObstacles: Set<SKSpriteNode> = []
     
     private var framesSinceLastCollision: Int64 = 0
+    
+    private var nextColor4Background: SKColor? = nil
         
     // private var startTouch: CGPoint? = nil
     private var touchPos: CGPoint? = nil
@@ -95,6 +99,7 @@ class Playground: SKScene {
         localObstacle.size = CGSize(width: 128, height: 128)
         localObstacle.position = CGPoint(x: position, y: ((self.view?.frame.height)! + obstacle.frame.height))
         localObstacle.setScale((((self.view?.frame.width)! <= 512) ? 0.55:0.8))
+        localObstacle.zPosition = 1
         localObstacle.lightingBitMask = 0x1
         localObstacle.shadowCastBitMask = 0x1
         localObstaclesShadow.size = CGSize(width: (localObstacle.size.width*(((self.view?.frame.width)! <= 512) ? 2.25:1.5)), height: (localObstacle.size.height*(((self.view?.frame.width)! <= 512) ? 2.25:1.5)))
@@ -168,6 +173,29 @@ class Playground: SKScene {
     
     private func countFramerate() {
         timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(aSecondPassed), userInfo: nil, repeats: true)
+    }
+    
+    private func drawBackground(parent: SKNode) {
+        background.removeAllChildren()
+        background.removeFromParent()
+        let lanes2Draw = 38
+        let curvature = (1.02-(((player.position.x+(self.scene?.frame.midX)!)/(self.scene?.frame.midX)!)/100))
+        for position in 0...lanes2Draw {
+            let positionX = (((self.scene?.frame.width)!/CGFloat(lanes2Draw)*2)*CGFloat(position*2))
+            var paths = [CGPoint(x: positionX, y: 0), CGPoint(x: pow((((self.scene?.frame.width)!/CGFloat(lanes2Draw)*2)*CGFloat(position*2)), curvature), y: self.player.position.y), CGPoint(x: positionX, y: (self.scene?.frame.height)!)]
+            let backgroundLane = SKShapeNode(splinePoints: &paths, count: 3)
+            backgroundLane.position.x -= (self.view?.frame.width)!
+            if let color = nextColor4Background {
+                backgroundLane.strokeColor = color
+            } else {
+                nextColor4Background = generateRandomColor()
+                backgroundLane.strokeColor = nextColor4Background!
+            }
+            backgroundLane.lineWidth = 3
+            backgroundLane.glowWidth = 1
+            background.addChild(backgroundLane)
+        }
+        parent.addChild(background)
     }
     
     override func didMove(to view: SKView) {
@@ -253,6 +281,7 @@ class Playground: SKScene {
             haptics()
             (playerLight.lightColor, playerLight.ambientColor) = (generateRandomColor(), generateRandomColor())
             (playerParticle!.particleColor, playerParticle!.particleColorSequence) = generateColor4Particle()
+            nextColor4Background = generateRandomColor()
             let randomOption = Int.random(in: 0...4)
             switch randomOption {
                 case 0: setWave(Audio.waves.sine)
@@ -291,5 +320,6 @@ class Playground: SKScene {
                 setFrequency(move.x)
             }
         }
+        drawBackground(parent: self)
     }
 }

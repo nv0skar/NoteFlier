@@ -110,17 +110,17 @@ class Audio {
         amplitude = ((ampl<1) ? ((ampl<0) ? 0:ampl):1)
     }
     
-    private func recordBuffer(_ duration: Float) {
+    private func record(_ duration: Float) {
         var outFile: AVAudioFile?
         var samplesWritten: AVAudioFrameCount = 0
         let outUrl = (FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0] as NSURL).appendingPathComponent(String(UUID.init().uuidString).appending(".m4a"))
         let outDirExists = try? outUrl!.deletingLastPathComponent().checkResourceIsReachable()
         if outDirExists != nil {
-            var outputFormatSettings = audioSource.outputFormat(forBus: 0).settings
+            var outputFormatSettings = mixer.outputFormat(forBus: 0).settings
             outputFormatSettings[AVLinearPCMIsNonInterleaved] = false
             outFile = try! AVAudioFile(forWriting: outUrl!, settings: outputFormatSettings)
             let samples2Write = AVAudioFrameCount(duration * sampleRate)
-            audioSource.installTap(onBus: 0, bufferSize: 1024, format: inputFormat) { buffer, _ in
+            mixer.installTap(onBus: 0, bufferSize: 1024, format: inputFormat) { buffer, _ in
                 if samplesWritten + buffer.frameLength > samples2Write {
                     buffer.frameLength = samples2Write - samplesWritten
                 }
@@ -128,7 +128,7 @@ class Audio {
                 samplesWritten += buffer.frameLength
                 if samplesWritten == samples2Write {
                     outFile = nil
-                    self.audioSource.removeTap(onBus: 0)
+                    self.mixer.removeTap(onBus: 0)
                 }
             }
         }
