@@ -20,8 +20,8 @@ struct Main: View {
                     .font(Font.system(size:48, design: .rounded))
                     .fontWeight(.black)
                     .padding([.bottom], (viewInfo.size.height*0.6))
-                    .shiny(.hyperGlossy(UIColor(Visuals.Utils.createRandomArrayColors(1).first!)))
-                    .glow(32)
+                    .blendMode(.overlay)
+                    // .glow(32)
                     .background(
                         RoundedRectangle(cornerRadius: 14.0)
                             .frame(width: 280, height: 80.0)
@@ -29,31 +29,60 @@ struct Main: View {
                                 Color(red: (234/255), green: (63/255), blue: (63/255), opacity: 1),
                                 Color(red: (255/255), green: 0, blue: (101/255), opacity: 1),
                             ])))
+                            .glow(8)
                             .shadow(radius: 4)
                             .padding([.bottom], (viewInfo.size.height*0.6))
                     )
-                VStack {
-                    Button(action: { showLooper.toggle() }, label: {
-                        Text("Looper!")
-                            .fontWeight(.heavy)
-                            .font(Font.system(size: 26))
-                            .shiny(.rainbow)
-                            .background(
-                                    RoundedRectangle(cornerRadius: 32.0)
-                                        .frame(width: 160.0, height: 50.0)
-                                        .foregroundColor((UIColor.systemBackground == UIColor.white) ? Color(UIColor.black):Color(UIColor.white))
-                                        .shadow(radius: 4)
-                            )
-                            .padding([.bottom], 20)
-                    })
-                    .present(isPresented: $showLooper, transition: .crossDissolve, style: .fullScreen) { Looper().transition(.scale) }
-                    Button(action: { showRecordings = .large }, label: {
+                VStack(alignment: .center) {
+                    VStack {
+                        Button(action: {
+                            if !showLooper { showLooper.toggle() }
+                        }, label: {
+                            Text("Looper!")
+                                .fontWeight(.heavy)
+                                .font(Font.system(size: 26))
+                                .shiny(Gradient(colors: Visuals.Utils.createRandomArrayColors(6, appendColors: [
+                                    Color(red: (234/255), green: (63/255), blue: (63/255), opacity: 1),
+                                    Color(red: (255/255), green: 0, blue: (101/255), opacity: 1),
+                                ])))
+                                .background(
+                                        RoundedRectangle(cornerRadius: 32.0)
+                                            .frame(width: 180.0, height: 60.0)
+                                            .shiny(.matte((UIColor.systemBackground == UIColor.white) ? (UIColor.black):(UIColor.white)))
+                                            .shadow(radius: 4)
+                                )
+                                .padding([.bottom], 32)
+                        })
+                        .present(isPresented: $showLooper, transition: .crossDissolve, style: .fullScreen, content: { Looper(inContext: $showLooper) })
+                        Button(action: {
+                            if !showLooper { showIntro.toggle() }
+                        }, label: {
+                            Text("🏗 OnionWaves 🏗")
+                                .fontWeight(.heavy)
+                                .font(Font.system(size: 22, design: .monospaced))
+                                .shiny(.hyperGlossy(.cyan))
+                                .background(
+                                        RoundedRectangle(cornerRadius: 32.0)
+                                            .frame(width: 240.0, height: 60.0)
+                                            .shiny(.glossy((UIColor.systemBackground == UIColor.white) ? (UIColor.yellow):(UIColor.purple)))
+                                            .shadow(radius: 4)
+                                )
+                                .padding([.bottom], 32)
+                        })
+                    }
+                    Spacer()
+                    Button(action: {
+                        if !showLooper { showRecordings = .large }
+                    }, label: {
                         Text("Saved Loops")
                             .fontWeight(.bold)
                             .font(Font.system(size: 18))
-                            .foregroundColor(.white)
+                            .foregroundColor((UIColor.systemBackground == UIColor.white) ? Color(UIColor.black):Color(UIColor.white))
+                            .frame(width: (viewInfo.size.width*0.5), height: 120, alignment: .bottom)
+                            .padding([.bottom], 12)
                     })
                 }
+                .padding([.top], (viewInfo.size.height*0.5))
                 IntroEgg(show: $showIntro)
                 Recordings(displayState: $showRecordings)
             }

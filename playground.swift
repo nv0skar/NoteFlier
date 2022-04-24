@@ -2,7 +2,7 @@
 
 import Foundation
 import SpriteKit
-import SwiftUI
+import AVFoundation
 
 class Playground: SKScene {
     private let player = SKSpriteNode(imageNamed: "Player")
@@ -206,12 +206,37 @@ class Playground: SKScene {
         countFramerate()
     }
     
-    private func setFrequency(_ xAxisOffset: CGFloat) {
-        engine.setFrequency((Float(xAxisOffset)*(Float(abs(Audio.maxFrequency-Audio.minFrequency))/Float((self.scene?.frame.width)!))))
+    private func setRandomReverb() {
+        engine.setReverb(Data.AudioEffects.Reverb(wetDryMix: Float.random(in: 0...100)))
     }
     
-    private func setWave(_ waveType: @escaping (Float) -> Float) {
-        engine.setWave(waveType)
+    private func setRandomDelay() {
+        engine.setDelay(Data.AudioEffects.Delay(delayTime: TimeInterval(floatLiteral: Double.random(in: 0...2)), feedback: Float.random(in: -100...100), lowPassCutoff: Float.random(in: -14000...16000), wetDryMix: Float.random(in: 0...100)))
+    }
+    
+    private func setRandomDistorsion() {
+        engine.setDistorsion(Data.AudioEffects.Distorsion(preGain: Float.random(in: -8...(-4)), wetDryMix: Float.random(in: 0...100)))
+    }
+    
+    private func setRandomEQ() {
+        let eqParams = Data.AudioEffects.EQ.Bands(bandwidth: Float.random(in: 0.05...5.0), bypass: Bool.random(), filterType: AVAudioUnitEQFilterType.init(rawValue: Int.random(in: 0...10))!, frequency: Float.random(in: (engine.sampleRate/2)...((engine.sampleRate/2)+20)), gain: Float.random(in: -4...4))
+        engine.setEQ(Data.AudioEffects.EQ.Main(bands: [eqParams], globalGain: Float.random(in: -4...4)))
+    }
+    
+    private func setRandomWave() {
+        let randomOption = Int.random(in: 0...4)
+        switch randomOption {
+            case 0: engine.setWave(Audio.waves.sine)
+            case 1: engine.setWave(Audio.waves.sawtoothUp)
+            case 2: engine.setWave(Audio.waves.sawtoothDown)
+            case 3: engine.setWave(Audio.waves.square)
+            case 4: engine.setWave(Audio.waves.triangle)
+            default: engine.setWave(Audio.waves.sine)
+        }
+    }
+    
+    private func setFrequency(_ xAxisOffset: CGFloat) {
+        engine.setFrequency((Float(xAxisOffset)*(Float(abs(Audio.maxFrequency-Audio.minFrequency))/Float((self.scene?.frame.width)!))))
     }
     
     private func setAmplitude(_ ampl: Float) {
@@ -283,15 +308,11 @@ class Playground: SKScene {
             (playerLight.lightColor, playerLight.ambientColor) = (generateRandomColor(), generateRandomColor())
             (playerParticle!.particleColor, playerParticle!.particleColorSequence) = generateColor4Particle()
             nextColor4Background = generateRandomColor()
-            let randomOption = Int.random(in: 0...4)
-            switch randomOption {
-                case 0: setWave(Audio.waves.sine)
-                case 1: setWave(Audio.waves.sawtoothUp)
-                case 2: setWave(Audio.waves.sawtoothDown)
-                case 3: setWave(Audio.waves.square)
-                case 4: setWave(Audio.waves.triangle)
-                default: setWave(Audio.waves.sine)
-            }
+            setRandomWave()
+            setRandomReverb()
+            setRandomDelay()
+            setRandomDistorsion()
+            setRandomEQ()
             framesSinceLastCollision = 0
         }
     }

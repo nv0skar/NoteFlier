@@ -48,7 +48,7 @@ class Audio {
     private var mixer: AVAudioMixerNode
     private var output: AVAudioOutputNode
     private var outputFormat: AVAudioFormat
-    private var sampleRate: Float
+    public var sampleRate: Float
     private var inputFormat: AVAudioFormat
     private var audioSource: AVAudioNode = AVAudioNode()
     private var currentPhase: Float = 0
@@ -56,6 +56,16 @@ class Audio {
     private var frequency: Float = 0
     private var amplitude: Float = 1
     private var wave: (Float) -> Float = waves.sine
+    
+    private var AUReverb: AVAudioUnitReverb
+    private var AUDelay: AVAudioUnitDelay
+    private var AUDistorsion: AVAudioUnitDistortion
+    private var AUeQ: AVAudioUnitEQ
+    
+    private var reverb: Data.AudioEffects.Reverb = .init(wetDryMix: 0)
+    private var delay: Data.AudioEffects.Delay = .init(delayTime: TimeInterval(floatLiteral: 0), feedback: 0, lowPassCutoff: 0, wetDryMix: 0)
+    private var distorsion: Data.AudioEffects.Distorsion = .init(preGain: 0, wetDryMix: 0)
+    private var eq: Data.AudioEffects.EQ.Main = .init(bands: [], globalGain: 0)
     
     private var isRecording: Binding<Bool>? = nil
     public var endRecordingEvent: () -> Void = {}
@@ -66,6 +76,10 @@ class Audio {
         outputFormat = output.inputFormat(forBus: 0)
         sampleRate = Float(outputFormat.sampleRate)
         inputFormat = AVAudioFormat(commonFormat: outputFormat.commonFormat, sampleRate: outputFormat.sampleRate, channels: 1, interleaved: outputFormat.isInterleaved)!
+        AUReverb = AVAudioUnitReverb()
+        AUDelay = AVAudioUnitDelay()
+        AUDistorsion = AVAudioUnitDistortion()
+        AUeQ = AVAudioUnitEQ(numberOfBands: 1)
         audioSource = AVAudioSourceNode { _, _, frameCount, audioBufferList -> OSStatus in
             let phaseIncrement = self.phase()
             let ablPointer = UnsafeMutableAudioBufferListPointer(audioBufferList)
@@ -89,6 +103,10 @@ class Audio {
     
     public func start() {
         engine.attach(audioSource)
+        // engine.connect(AUReverb, to: audioSource, format: inputFormat)
+        // engine.connect(AUDelay, to: audioSource, format: inputFormat)
+        // engine.connect(AUDistorsion, to: audioSource, format: inputFormat)
+        // engine.connect(AUeQ, to: audioSource, format: inputFormat)
         engine.connect(audioSource, to: mixer, format: inputFormat)
         engine.connect(mixer, to: output, format: outputFormat)
         mixer.outputVolume = 0
@@ -101,6 +119,32 @@ class Audio {
     
     public func pause() {
         mixer.outputVolume = 0
+    }
+    
+    public func setReverb(_ effect: Data.AudioEffects.Reverb) {
+        AUReverb.wetDryMix = effect.wetDryMix
+    }
+    
+    public func setDelay(_ effect: Data.AudioEffects.Delay) {
+        AUDelay.delayTime = effect.delayTime
+        AUDelay.feedback = effect.feedback
+        AUDelay.lowPassCutoff = effect.lowPassCutoff
+        AUDelay.wetDryMix = effect.wetDryMix
+    }
+    
+    public func setDistorsion(_ effect: Data.AudioEffects.Distorsion) {
+        AUDistorsion.preGain = effect.preGain
+        AUDistorsion.wetDryMix = effect.wetDryMix
+    }
+    
+    public func setEQ(_ effect: Data.AudioEffects.EQ.Main) {
+        let eqPams: AVAudioUnitEQFilterParameters = AUeQ.bands.first! as AVAudioUnitEQFilterParameters
+        let _ = eqPams
+        eqPams.frequency = effect.bands.first!.frequency
+        eqPams.filterType = effect.bands.first!.filterType
+        eqPams.gain = effect.bands.first!.gain
+        eqPams.bypass = effect.bands.first!.bypass
+        AUeQ.globalGain = effect.globalGain
     }
     
     public func setWave(_ waveType: @escaping (Float) -> Float) {
@@ -137,7 +181,7 @@ class Audio {
                     outFile = nil
                     self.audioSource.removeTap(onBus: 0)
                     self.isRecording?.wrappedValue = false
-                    recordings.update(with: Recording(name2Show: outFilename, path: (outUrl!)))
+                    recordings.update(with: Data.Recording(name2Show: outFilename, path: (outUrl!)))
                     self.endRecordingEvent()
                 }
             }
