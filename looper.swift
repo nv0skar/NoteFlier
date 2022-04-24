@@ -3,15 +3,13 @@
 import Foundation
 import SpriteKit
 import SwiftUI
-import Combine
 
 struct Looper: View {
     @Environment(\.dismiss) var dismiss
     @State var isRecording: Bool = false
     @State var recordingStatusIndicatorProgress: Float = 0
     @State var recordingStatusIndicatorProgressRising: Bool = true
-    var recordingStatusIndicatorProgressTimer = Timer.publish(every: 0.5, on: .main, in: .common)
-    @State var recordingStatusIndicatorProgressTimerCancellable: AnyCancellable?
+    var recordingStatusIndicatorProgressTimer = Timer.publish(every: 0.5, on: .main, in: .common).autoconnect()
     
     @Binding var inContext: Bool
     
@@ -29,17 +27,20 @@ struct Looper: View {
                         .padding(.all, 2.0)
                         .opacity(0.75)
                         .glow(12)
-                        .onReceive(recordingStatusIndicatorProgressTimerCancellable.publisher) { _ in
-                            print(recordingStatusIndicatorProgress)
+                        .onReceive(recordingStatusIndicatorProgressTimer) { _ in
                             withAnimation(Animation.linear(duration: 0.5)) {
-                                        if (recordingStatusIndicatorProgress >= 1 && recordingStatusIndicatorProgressRising) || (recordingStatusIndicatorProgress < 0 && !recordingStatusIndicatorProgressRising) {
-                                            recordingStatusIndicatorProgressRising.toggle()
-                                        } else {
-                                            print(((recordingStatusIndicatorProgressRising) ? 0.02:-0.02))
-                                            recordingStatusIndicatorProgress += ((recordingStatusIndicatorProgressRising) ? 0.08:-0.08)
-                                        }
-                                    }
+                                if !isRecording {
+                                    if (recordingStatusIndicatorProgress > 0) {
+                                        recordingStatusIndicatorProgress = 0
+                                    }; return
                                 }
+                                if (recordingStatusIndicatorProgress >= 1 && recordingStatusIndicatorProgressRising) || (recordingStatusIndicatorProgress < 0 && !recordingStatusIndicatorProgressRising) {
+                                    recordingStatusIndicatorProgressRising.toggle()
+                                } else {
+                                    recordingStatusIndicatorProgress += ((recordingStatusIndicatorProgressRising) ? 0.08:-0.08)
+                                }
+                            }
+                        }
                         .rotationEffect(.degrees(270))
                         .scaleEffect(CGSize(width: ((recordingStatusIndicatorProgressRising) ? 1:-1), height: 1))
                         .animation(Animation.easeInOut(duration: 0), value: recordingStatusIndicatorProgressRising)
@@ -71,14 +72,7 @@ struct Looper: View {
                         let impactFeedbackgenerator = UIImpactFeedbackGenerator(style: .rigid)
                         impactFeedbackgenerator.impactOccurred()
                         Scene.engine.record()
-                        recordingStatusIndicatorProgressTimerCancellable = recordingStatusIndicatorProgressTimer.connect() as? AnyCancellable
-                        } else {
-                            if let cancellableTimer = recordingStatusIndicatorProgressTimerCancellable {
-                                cancellableTimer.cancel()
-                            }
-                            recordingStatusIndicatorProgress = 0
-                            Scene.engine.killRecording()
-                        }
+                        } else { Scene.engine.killRecording() }
                     })
                 }
                 .frame(width: 84, height: 48, alignment: .center)
