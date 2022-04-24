@@ -2,11 +2,13 @@
 
 import Foundation
 import AVFoundation
+import SwiftUI
 
 class Audio {
     static let twoPi = (2*Float.pi)
     static let maxFrequency: Float = 440
     static let minFrequency: Float = 20.6
+    static let recordDuration: Float = 30.0
     
     public struct waves {
         static let sine = { (phase: Float) -> Float in
@@ -54,6 +56,9 @@ class Audio {
     private var frequency: Float = 0
     private var amplitude: Float = 1
     private var wave: (Float) -> Float = waves.sine
+    
+    private var isRecording: Binding<Bool>? = nil
+    public var endRecordingEvent: () -> Void = {}
     
     init() {
         mixer = engine.mainMixerNode
@@ -110,17 +115,18 @@ class Audio {
         amplitude = ((ampl<1) ? ((ampl<0) ? 0:ampl):1)
     }
     
-    private func record(_ duration: Float) {
+    public func record(_ duration: Float = Audio.recordDuration) {
+        self.isRecording?.wrappedValue = true
         var outFile: AVAudioFile?
         var samplesWritten: AVAudioFrameCount = 0
         let outUrl = (FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0] as NSURL).appendingPathComponent(String(UUID.init().uuidString).appending(".m4a"))
         let outDirExists = try? outUrl!.deletingLastPathComponent().checkResourceIsReachable()
         if outDirExists != nil {
-            var outputFormatSettings = mixer.outputFormat(forBus: 0).settings
+            var outputFormatSettings = audioSource.outputFormat(forBus: 0).settings
             outputFormatSettings[AVLinearPCMIsNonInterleaved] = false
             outFile = try! AVAudioFile(forWriting: outUrl!, settings: outputFormatSettings)
             let samples2Write = AVAudioFrameCount(duration * sampleRate)
-            mixer.installTap(onBus: 0, bufferSize: 1024, format: inputFormat) { buffer, _ in
+            audioSource.installTap(onBus: 0, bufferSize: 1024, format: inputFormat) { buffer, _ in
                 if samplesWritten + buffer.frameLength > samples2Write {
                     buffer.frameLength = samples2Write - samplesWritten
                 }
@@ -128,10 +134,22 @@ class Audio {
                 samplesWritten += buffer.frameLength
                 if samplesWritten == samples2Write {
                     outFile = nil
-                    self.mixer.removeTap(onBus: 0)
+                    self.audioSource.removeTap(onBus: 0)
+                    self.isRecording?.wrappedValue = false
+                    self.endRecordingEvent()
                 }
             }
         }
+    }
+    
+    public func setRecordingPointer(_ recordingUpdater: Binding<Bool>) {
+        self.isRecording = recordingUpdater
+    }
+        
+    public func killRecording() {
+        self.audioSource.removeTap(onBus: 0)
+        self.isRecording?.wrappedValue = false
+        self.endRecordingEvent()
     }
 
     private func phase() -> Float {

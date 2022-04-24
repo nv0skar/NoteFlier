@@ -2,6 +2,7 @@
 
 import Foundation
 import SpriteKit
+import SwiftUI
 
 class Playground: SKScene {
     private let player = SKSpriteNode(imageNamed: "Player")
@@ -14,8 +15,8 @@ class Playground: SKScene {
     
     private let background = SKNode()
         
-    private let engine = Audio()
-        
+    public let engine = Audio()
+    
     private var framesSinceLastObstacle: Int64 = 0
     
     private var framesRenderedSinceLastRateCheck: Int64 = 0
@@ -30,7 +31,7 @@ class Playground: SKScene {
         
     // private var startTouch: CGPoint? = nil
     private var touchPos: CGPoint? = nil
-    
+        
     override func sceneDidLoad() {
         self.scaleMode = .resizeFill
         self.backgroundColor = .black

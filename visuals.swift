@@ -56,6 +56,11 @@ class Visuals {
         }
     }
     
+    /* {
+        let icon2Show = UIImage(systemName: "record.circle", withConfiguration: UIImage.SymbolConfiguration(weight: .heavy))!.withTintColor(UIColor(Visuals.Utils.createRandomArrayColors(1).first!), renderingMode: .alwaysOriginal)
+        Visuals.Notify(title: "Recording ended!", subtitle: "The loop was saved as: NewLoop_23-04-2022.m4a", icon: icon2Show).present()
+    } */
+    
     class Utils {
         static func createRandomArrayColors(_ count: Int, appendColors: [Color]? = nil) -> [Color] {
             var colors: [Color] = []
@@ -80,11 +85,15 @@ extension String{
 extension View {
     func glow(_ blur: Float = 32) -> some View {
         ZStack {
-            ForEach(0..<2) { i in
-                Rectangle()
-                    .fill(AngularGradient(gradient: Gradient(colors: Visuals.Utils.createRandomArrayColors(2)), center: .center))
-                    .mask(self.blur(radius: CGFloat(blur)))
-                    .overlay(self.blur(radius: CGFloat(blur-(Float(i)*blur))))
+            if blur != 0 {
+                ForEach(0..<2) { i in
+                    Rectangle()
+                        .fill(AngularGradient(gradient: Gradient(colors: Visuals.Utils.createRandomArrayColors(2)), center: .center))
+                        .mask(self.blur(radius: CGFloat(blur)))
+                        .overlay(self.blur(radius: CGFloat(blur-(Float(i)*blur))))
+                }
+            } else {
+                EmptyView()
             }
         }
     }
