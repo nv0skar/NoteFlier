@@ -16,7 +16,7 @@ class Visuals {
             var body: some View {
                 GeometryReader { viewInfo in
                     ForEach((0...emojis2Draw), id: \.self) { count in
-                        Text(String.randomizeEmoji())
+                        Text(["🎧", "🔈", "🎹", "🎛️", "🎙️", "🎸", "🎺", "🎷"].randomElement()!)
                             .font(Font.system(size: emojiSize))
                             .rotationEffect(Angle(radians: Double(Float.random(in: -1.6...1.6))))
                             .position(
@@ -65,15 +65,6 @@ class Visuals {
             }
             return colors
         }
-    }
-}
-
-extension String{
-    static func randomizeEmoji() -> String {
-        let range = [UInt32](0x1F601...0x1F64F)
-        let char = range[Int(drand48() * (Double(range.count)))]
-        let emoji = UnicodeScalar(char)?.description
-        return emoji!
     }
 }
 
