@@ -93,7 +93,7 @@ class Playground: SKScene {
     }
     
     private func spawnObstacle() {
-        if spawnedObstacles.count == 3 { return }
+        if spawnedObstacles.count == 3 || engine.isRecording?.wrappedValue ?? false { return }
         let localObstacle = obstacle.copy() as! SKSpriteNode
         let localObstaclesShadow = obstacleShadow.copy() as! SKSpriteNode
         let position = ((self.view?.frame.width)!/100)*CGFloat(Int32.random(in: 10...90))

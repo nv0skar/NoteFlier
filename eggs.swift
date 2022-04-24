@@ -36,7 +36,8 @@ struct IntroEgg: View {
                     VStack(spacing: 0) {
                         Button("Let's go!", action: { show = false }).buttonStyle(SOCActionButton())
                     }
-                }.frame(maxHeight: 650)
+                    .padding([.bottom], 12)
+                }.frame(maxHeight: 660)
             }
         }
     }

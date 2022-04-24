@@ -8,7 +8,6 @@ class Audio {
     static let twoPi = (2*Float.pi)
     static let maxFrequency: Float = 440
     static let minFrequency: Float = 20.6
-    static let recordDuration: Float = 6
     
     public struct waves {
         static let sine = { (phase: Float) -> Float in
@@ -67,8 +66,10 @@ class Audio {
     private var distorsion: Data.AudioEffects.Distorsion = .init(preGain: 0, wetDryMix: 0)
     private var eq: Data.AudioEffects.EQ.Main = .init(bands: [], globalGain: 0)
     
-    private var isRecording: Binding<Bool>? = nil
+    public var isRecording: Binding<Bool>? = nil
     public var endRecordingEvent: () -> Void = {}
+    
+    private var liveRecordingShared: Data.Recording? = nil
     
     init() {
         mixer = engine.mainMixerNode
@@ -163,31 +164,19 @@ class Audio {
         amplitude = ((ampl<1) ? ((ampl<0) ? 0:ampl):1)
     }
     
-    public func record(_ duration: Float = Audio.recordDuration) {
+    public func record() {
         self.isRecording?.wrappedValue = true
         var outFile: AVAudioFile?
-        var samplesWritten: AVAudioFrameCount = 0
         let outFilename = String(UUID.init().uuidString)
         let outUrl = (FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0] as NSURL).appendingPathComponent(outFilename.appending(".m4a"))
         let outDirExists = try? outUrl!.deletingLastPathComponent().checkResourceIsReachable()
         if outDirExists != nil {
+            liveRecordingShared = Data.Recording(name2Show: outFilename, path: (outUrl!))
             var outputFormatSettings = mixer.outputFormat(forBus: 0).settings
             outputFormatSettings[AVLinearPCMIsNonInterleaved] = false
             outFile = try! AVAudioFile(forWriting: outUrl!, settings: outputFormatSettings)
-            let samples2Write = AVAudioFrameCount(duration * sampleRate)
             mixer.installTap(onBus: 0, bufferSize: 1024, format: mixer.outputFormat(forBus: 0)) { buffer, _ in
-                if samplesWritten + buffer.frameLength > samples2Write {
-                    buffer.frameLength = samples2Write - samplesWritten
-                }
                 try? outFile?.write(from: buffer)
-                samplesWritten += buffer.frameLength
-                if samplesWritten == samples2Write {
-                    outFile = nil
-                    self.engine.mainMixerNode.removeTap(onBus: 0)
-                    self.isRecording?.wrappedValue = false
-                    recordings.update(with: Data.Recording(name2Show: outFilename, path: (outUrl!)))
-                    self.endRecordingEvent()
-                }
             }
         }
     }
@@ -199,7 +188,12 @@ class Audio {
     public func killRecording() {
         self.engine.mainMixerNode.removeTap(onBus: 0)
         self.isRecording?.wrappedValue = false
+        if let recording = liveRecordingShared { recordings.update(with: recording) }
         self.endRecordingEvent()
+    }
+    
+    public func stopEngine() {
+        self.engine.stop()
     }
 
     private func phase() -> Float {
