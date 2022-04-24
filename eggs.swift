@@ -26,7 +26,7 @@ struct IntroEgg: View {
                                     HStack {
                                         Text("\(Image(systemName: intro.icon))").fontWeight(.heavy).font(Font.system(size:24))
                                             .frame(width: 56, height: 56, alignment: .center).foregroundColor(.white)
-                                        Text(intro.text).fontWeight(.bold).font(Font.system(size: 16, design: .rounded)).foregroundColor(.white)
+                                        Text(intro.text).fontWeight(.bold).font(Font.system(size: 16, design: .rounded)).foregroundColor(.white).frame(maxWidth: .infinity, alignment: .leading)
                                     }
                                     if !(intro == Fixed.Eggs.Intro[Fixed.Eggs.Intro.count-1]) { Divider() }
                                 }

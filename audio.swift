@@ -6,7 +6,7 @@ import SwiftUI
 
 class Audio {
     static let twoPi = (2*Float.pi)
-    static let maxFrequency: Float = 440
+    static let maxFrequency: Float = 280
     static let minFrequency: Float = 20.6
     
     public struct waves {
@@ -110,8 +110,8 @@ class Audio {
         engine.attach(AUeQ)
         engine.connect(audioSource, to: AUReverb, format: inputFormat)
         engine.connect(AUReverb, to: AUDelay, format: inputFormat)
-        engine.connect(AUDelay, to: AUDistorsion, format: inputFormat)
-        engine.connect(AUDistorsion, to: AUeQ, format: inputFormat)
+        engine.connect(AUDelay, to: AUeQ, format: inputFormat)
+        // engine.connect(AUDistorsion, to: nil, format: inputFormat)
         engine.connect(AUeQ, to: mixer, format: inputFormat)
         engine.connect(mixer, to: output, format: outputFormat)
         mixer.outputVolume = 0

@@ -9,6 +9,8 @@ import Shiny
 import SlideOverCard
 
 struct Main: View {
+    @Environment(\.colorScheme) var colorScheme
+    
     @State private var showLooper = false
     @State private var showIntro = true
     @State private var showRecordings: OvercastSnapState = .invisible
@@ -21,7 +23,6 @@ struct Main: View {
                     .fontWeight(.black)
                     .padding([.bottom], (viewInfo.size.height*0.6))
                     .blendMode(.overlay)
-                    // .glow(32)
                     .background(
                         RoundedRectangle(cornerRadius: 14.0)
                             .frame(width: 280, height: 80.0)
@@ -41,6 +42,7 @@ struct Main: View {
                             Text("Looper!")
                                 .fontWeight(.heavy)
                                 .font(Font.system(size: 26))
+                                .blendMode(.exclusion)
                                 .shiny(Gradient(colors: Visuals.Utils.createRandomArrayColors(6, appendColors: [
                                     Color(red: (234/255), green: (63/255), blue: (63/255), opacity: 1),
                                     Color(red: (255/255), green: 0, blue: (101/255), opacity: 1),
@@ -48,7 +50,7 @@ struct Main: View {
                                 .background(
                                         RoundedRectangle(cornerRadius: 32.0)
                                             .frame(width: 180.0, height: 60.0)
-                                            .shiny(.matte((UIColor.systemBackground == UIColor.white) ? (UIColor.black):(UIColor.white)))
+                                            .shiny(.matte((colorScheme == .light) ? (UIColor(red: (45/255), green: (50/255), blue: (100/255), alpha: 1)):(UIColor.white)))
                                             .shadow(radius: 4)
                                 )
                                 .padding([.bottom], 32)
@@ -60,11 +62,13 @@ struct Main: View {
                             Text("🏗 OnionWaves 🏗")
                                 .fontWeight(.heavy)
                                 .font(Font.system(size: 22, design: .monospaced))
+                                .foregroundColor((colorScheme == .light) ? Color(UIColor.black):Color(UIColor.white))
+                                .blendMode(.exclusion)
                                 .shiny(.hyperGlossy(.cyan))
                                 .background(
                                         RoundedRectangle(cornerRadius: 32.0)
                                             .frame(width: 240.0, height: 60.0)
-                                            .shiny(.glossy((UIColor.systemBackground == UIColor.white) ? (UIColor.yellow):(UIColor.purple)))
+                                            .shiny(.glossy((colorScheme == .light) ? (UIColor.yellow):(UIColor.purple)))
                                             .shadow(radius: 4)
                                 )
                                 .padding([.bottom], 32)
@@ -77,7 +81,7 @@ struct Main: View {
                         Text("Saved Loops")
                             .fontWeight(.bold)
                             .font(Font.system(size: 18))
-                            .foregroundColor((UIColor.systemBackground == UIColor.white) ? Color(UIColor.black):Color(UIColor.white))
+                            .foregroundColor((colorScheme == .light) ? Color(UIColor.black):Color(UIColor.white))
                             .frame(width: (viewInfo.size.width*0.5), height: 120, alignment: .bottom)
                             .padding([.bottom], 12)
                     })
@@ -92,12 +96,14 @@ struct Main: View {
 }
 
 struct Recordings: View {
+    @Environment(\.colorScheme) var colorScheme
+    
     @Binding public var displayState: OvercastSnapState
     
     var body: some View {
         GeometryReader { viewInfo in
             SnapDrawer(state: $displayState, large: .paddingToTop(24), tiny: SnapPoint(floatLiteral: (viewInfo.size.height*0.4)), allowInvisible: true) { state in
-                FancyScrollView(title: "Recorded Loops", titleColor: Color.primary, headerHeight: (viewInfo.size.height*0.8), scrollUpHeaderBehavior: .parallax, scrollDownHeaderBehavior: .sticky) {
+                FancyScrollView(title: "Recorded Loops", titleColor: ((colorScheme == .light) ? Color.black:Color.white), scrollUpHeaderBehavior: .parallax, scrollDownHeaderBehavior: .sticky) {
                     VStack {
                         ForEach(Array(recordings), id: \.self) { recording in
                             VStack {
@@ -110,7 +116,7 @@ struct Recordings: View {
                                     UIApplication.shared.windows.first!.rootViewController?.present(view, animated: true, completion: nil)
                                 }
                                 Divider()
-                            } .padding(12)
+                            } .padding(24)
                         }
                     }
                     .gesture(

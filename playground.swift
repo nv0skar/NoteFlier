@@ -211,27 +211,27 @@ class Playground: SKScene {
     }
     
     private func setRandomDelay() {
-        engine.setDelay(Data.AudioEffects.Delay(delayTime: TimeInterval(floatLiteral: Double.random(in: 0...2)), feedback: Float.random(in: -100...100), lowPassCutoff: Float.random(in: -14000...16000), wetDryMix: Float.random(in: 0...100)))
+        engine.setDelay(Data.AudioEffects.Delay(delayTime: TimeInterval(floatLiteral: Double.random(in: 0...0.6)), feedback: Float.random(in: -100...50), lowPassCutoff: Float.random(in: -14000...16000), wetDryMix: Float.random(in: 0...100)))
     }
     
     private func setRandomDistorsion() {
-        engine.setDistorsion(Data.AudioEffects.Distorsion(preGain: Float.random(in: -8...(-4)), wetDryMix: Float.random(in: 0...100)))
+        engine.setDistorsion(Data.AudioEffects.Distorsion(preGain: Float.random(in: -18...(-14)), wetDryMix: Float.random(in: 0...2)))
     }
     
     private func setRandomEQ() {
-        let eqParams = Data.AudioEffects.EQ.Bands(bandwidth: Float.random(in: 0.05...5.0), bypass: Bool.random(), filterType: AVAudioUnitEQFilterType.init(rawValue: Int.random(in: 0...10))!, frequency: Float.random(in: (engine.sampleRate/2)...((engine.sampleRate/2)+20)), gain: Float.random(in: -4...4))
-        engine.setEQ(Data.AudioEffects.EQ.Main(bands: [eqParams], globalGain: Float.random(in: -4...4)))
+        let eqParams = Data.AudioEffects.EQ.Bands(bandwidth: Float.random(in: 0.05...1), bypass: Bool.random(), filterType: AVAudioUnitEQFilterType.init(rawValue: Int.random(in: 0...10))!, frequency: Float.random(in: Audio.maxFrequency...Audio.maxFrequency), gain: Float.random(in: -18...(-14)))
+        engine.setEQ(Data.AudioEffects.EQ.Main(bands: [eqParams], globalGain: Float.random(in: -4...(0))))
     }
     
     private func setRandomWave() {
         let randomOption = Int.random(in: 0...4)
         switch randomOption {
-            case 0: engine.setWave(Audio.waves.sine)
+            // case 0: engine.setWave(Audio.waves.sine)
             case 1: engine.setWave(Audio.waves.sawtoothUp)
             case 2: engine.setWave(Audio.waves.sawtoothDown)
             case 3: engine.setWave(Audio.waves.square)
             case 4: engine.setWave(Audio.waves.triangle)
-            default: engine.setWave(Audio.waves.sine)
+            default: engine.setWave(Audio.waves.sawtoothUp)
         }
     }
     
@@ -311,7 +311,7 @@ class Playground: SKScene {
             setRandomWave()
             setRandomReverb()
             setRandomDelay()
-            setRandomDistorsion()
+            // setRandomDistorsion()
             setRandomEQ()
             framesSinceLastCollision = 0
         }
