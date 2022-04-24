@@ -56,11 +56,6 @@ class Visuals {
         }
     }
     
-    /* {
-        let icon2Show = UIImage(systemName: "record.circle", withConfiguration: UIImage.SymbolConfiguration(weight: .heavy))!.withTintColor(UIColor(Visuals.Utils.createRandomArrayColors(1).first!), renderingMode: .alwaysOriginal)
-        Visuals.Notify(title: "Recording ended!", subtitle: "The loop was saved as: NewLoop_23-04-2022.m4a", icon: icon2Show).present()
-    } */
-    
     class Utils {
         static func createRandomArrayColors(_ count: Int, appendColors: [Color]? = nil) -> [Color] {
             var colors: [Color] = []

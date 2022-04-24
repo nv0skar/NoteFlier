@@ -6,9 +6,11 @@ import Snap
 import FancyScrollView
 import Presentation
 import Shiny
+import SlideOverCard
 
 struct Main: View {
     @State private var showLooper = false
+    @State private var showIntro = true
     @State private var showRecordings: OvercastSnapState = .invisible
     
     var body: some View {
@@ -52,6 +54,7 @@ struct Main: View {
                             .foregroundColor(.white)
                     })
                 }
+                IntroEgg(show: $showIntro)
                 Recordings(displayState: $showRecordings)
             }
             .background(Visuals.Views.DopeBackground())
@@ -66,7 +69,21 @@ struct Recordings: View {
         GeometryReader { viewInfo in
             SnapDrawer(state: $displayState, large: .paddingToTop(24), tiny: SnapPoint(floatLiteral: (viewInfo.size.height*0.4)), allowInvisible: true) { state in
                 FancyScrollView(title: "Recorded Loops", titleColor: Color.primary, headerHeight: (viewInfo.size.height*0.8), scrollUpHeaderBehavior: .parallax, scrollDownHeaderBehavior: .sticky) {
-                    VStack {}
+                    VStack {
+                        ForEach(Array(recordings), id: \.self) { recording in
+                            VStack {
+                                HStack {
+                                    Text("\(recording.name2Show)").bold()
+                                    Text("\(recording.path)").font(Font.system(size: 12, design: .monospaced))
+                                }
+                                .onTapGesture() {
+                                    let view = UIActivityViewController(activityItems: [recording.path], applicationActivities: nil)
+                                    UIApplication.shared.windows.first!.rootViewController?.present(view, animated: true, completion: nil)
+                                }
+                                Divider()
+                            } .padding(12)
+                        }
+                    }
                     .gesture(
                         DragGesture().onChanged({ gesture in
                                 if (gesture.predictedEndLocation.y-gesture.startLocation.y) >= 160 {

@@ -38,6 +38,15 @@
         }
       },
       {
+        "package": "SlideOverCard",
+        "repositoryURL": "https://github.com/joogps/SlideOverCard.git",
+        "state": {
+          "branch": null,
+          "revision": "ddafedae02dc5423aa872b274d9011412dc4837f",
+          "version": "2.0.0"
+        }
+      },
+      {
         "package": "Snap",
         "repositoryURL": "https://github.com/nerdsupremacist/Snap.git",
         "state": {

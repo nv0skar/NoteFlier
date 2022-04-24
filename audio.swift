@@ -8,7 +8,7 @@ class Audio {
     static let twoPi = (2*Float.pi)
     static let maxFrequency: Float = 440
     static let minFrequency: Float = 20.6
-    static let recordDuration: Float = 30.0
+    static let recordDuration: Float = 6
     
     public struct waves {
         static let sine = { (phase: Float) -> Float in
@@ -119,7 +119,8 @@ class Audio {
         self.isRecording?.wrappedValue = true
         var outFile: AVAudioFile?
         var samplesWritten: AVAudioFrameCount = 0
-        let outUrl = (FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0] as NSURL).appendingPathComponent(String(UUID.init().uuidString).appending(".m4a"))
+        let outFilename = String(UUID.init().uuidString)
+        let outUrl = (FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0] as NSURL).appendingPathComponent(outFilename.appending(".m4a"))
         let outDirExists = try? outUrl!.deletingLastPathComponent().checkResourceIsReachable()
         if outDirExists != nil {
             var outputFormatSettings = audioSource.outputFormat(forBus: 0).settings
@@ -136,6 +137,7 @@ class Audio {
                     outFile = nil
                     self.audioSource.removeTap(onBus: 0)
                     self.isRecording?.wrappedValue = false
+                    recordings.update(with: Recording(name2Show: outFilename, path: (outUrl!)))
                     self.endRecordingEvent()
                 }
             }
