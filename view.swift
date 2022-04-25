@@ -130,8 +130,6 @@ struct Recordings: View {
             }
             .background(Color(UIColor(white: 0, alpha: 0)))
         }
-        .onAppear() {
-            self.displayState = .invisibleState
-        }
+        .onAppear() { self.displayState = .invisibleState }
     }
 }

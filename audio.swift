@@ -109,10 +109,10 @@ class Audio {
         engine.attach(AUDistorsion)
         engine.attach(AUeQ)
         engine.connect(audioSource, to: AUReverb, format: inputFormat)
-        engine.connect(AUReverb, to: AUDelay, format: inputFormat)
-        engine.connect(AUDelay, to: AUeQ, format: inputFormat)
+        engine.connect(AUReverb, to: AUDelay, format: outputFormat)
+        engine.connect(AUDelay, to: AUeQ, format: outputFormat)
         // engine.connect(AUDistorsion, to: nil, format: inputFormat)
-        engine.connect(AUeQ, to: mixer, format: inputFormat)
+        engine.connect(AUeQ, to: mixer, format: outputFormat)
         engine.connect(mixer, to: output, format: outputFormat)
         mixer.outputVolume = 0
         try! engine.start()
