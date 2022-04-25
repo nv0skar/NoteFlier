@@ -54,7 +54,7 @@ let package = Package(
                 .product(name: "SlideOverCard", package: "slideovercard")
             ],
             path: ".",
-            exclude: ["README.md"],
+            exclude: ["README.md", "COPYING.txt"],
             resources: [
                 .process("Resources")
             ]
