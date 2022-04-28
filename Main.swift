@@ -16,11 +16,25 @@
 
 import SwiftUI
 
-@main
-struct Entry: App {
-    var body: some Scene {
-        WindowGroup {
-            Main()
+final class Delegate: UIResponder, UIApplicationDelegate {
+    override func buildMenu(with builder: UIMenuBuilder) {
+        super.buildMenu(with: builder)
+        for toRemove in [UIMenu.Identifier.preferences, UIMenu.Identifier.file, UIMenu.Identifier.view, UIMenu.Identifier.format, UIMenu.Identifier.edit, UIMenu.Identifier.window] {
+            builder.remove(menu: toRemove)
         }
+    }
+}
+
+@main
+struct Main: App {
+    @UIApplicationDelegateAdaptor(Delegate.self) var delegate
+    
+    var body: some Scene {
+        WindowGroup { OrchestratorDelegate().onAppear(perform: {
+            #if (DEBUG)
+            Commons.console.isVisible = true
+            Commons.console.print("NoteFlier - Debugger")
+            #endif
+        }) }
     }
 }

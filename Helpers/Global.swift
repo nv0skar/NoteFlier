@@ -15,8 +15,14 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import Foundation
+import LocalConsole
 
-var recordings: Set<Data.Recording> = [] // Temporal
+var recordings: [Data.Recording] = [] // Temporal
+
+class Commons {
+    static let defaults = UserDefaults.standard
+    static let console = LCManager.shared
+}
 
 class Fixed {
     class Eggs {

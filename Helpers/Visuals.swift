@@ -37,11 +37,11 @@ class Visuals {
                                 x: CGFloat.random(in: emojiSize...viewInfo.size.width-emojiSize),
                                 y: CGFloat(count*(Int(viewInfo.size.height)/emojis2Draw))
                             )
-                            .glow(8)
+                            .glow(12)
                             .scaleEffect(emojiScale)
                             .onAppear() {
-                                withAnimation(Animation.easeInOut(duration: 0.2)) {
-                                    if emojiScale != 1 { emojiScale = 1 }
+                                withAnimation(Animation.spring(dampingFraction: 0.6)) {
+                                    emojiScale = CGFloat.random(in: 0.9...1.1)
                                 }
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
                                     if !hapticFeedback {

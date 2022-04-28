@@ -202,7 +202,7 @@ class Audio {
     public func killRecording() {
         self.engine.mainMixerNode.removeTap(onBus: 0)
         self.isRecording?.wrappedValue = false
-        if let recording = liveRecordingShared { recordings.update(with: recording) }
+        if let recording = liveRecordingShared { recordings.append(recording) }
         self.endRecordingEvent()
     }
     

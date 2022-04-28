@@ -20,6 +20,15 @@
         }
       },
       {
+        "package": "LocalConsole",
+        "repositoryURL": "https://github.com/duraidabdul/LocalConsole.git",
+        "state": {
+          "branch": null,
+          "revision": "d995119198d9c4379ac5b2e023452dbde9162ce0",
+          "version": "1.9.5"
+        }
+      },
+      {
         "package": "Presentation",
         "repositoryURL": "https://github.com/SwiftUI-Plus/Presentation.git",
         "state": {
@@ -44,15 +53,6 @@
           "branch": null,
           "revision": "ddafedae02dc5423aa872b274d9011412dc4837f",
           "version": "2.0.0"
-        }
-      },
-      {
-        "package": "Snap",
-        "repositoryURL": "https://github.com/nerdsupremacist/Snap.git",
-        "state": {
-          "branch": null,
-          "revision": "29943b7064547f391ea8352dea04903e2263d831",
-          "version": "0.2.2"
         }
       }
     ]
