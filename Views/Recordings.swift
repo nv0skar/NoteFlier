@@ -21,7 +21,9 @@ import FancyScrollView
 struct Recordings: View {
     @Environment(\.dismiss) var dismiss
     @Environment(\.colorScheme) var colorScheme
-        
+
+    @State var exportView = false
+    
     var body: some View {
         GeometryReader { viewInfo in
             VStack {
@@ -38,8 +40,10 @@ struct Recordings: View {
                                     Text("\(recording.path)").font(Font.system(size: 12, design: .monospaced)).frame(maxWidth: .infinity, alignment: .leading)
                                 }
                                 .onTapGesture() {
-                                    let view = UIActivityViewController(activityItems: [recording.path], applicationActivities: nil)
-                                    UIApplication.shared.windows.first!.rootViewController?.present(view, animated: true, completion: nil)
+                                    let sheetWindow = (UIApplication.shared.connectedScenes.first { $0.activationState == .foregroundActive } as? UIWindowScene)?.windows.filter(\.isKeyWindow).first
+                                    let sheetController = sheetWindow?.rootViewController?.presentedViewController ?? sheetWindow?.rootViewController
+                                    sheetController?.present(UIActivityViewController(activityItems: [recording.path], applicationActivities: nil), animated: true)
+                                    }
                                 }
                                 if !(recording == recordings[recordings.count-1]) { Divider() }
                             }
@@ -50,5 +54,4 @@ struct Recordings: View {
                 }
             }
         }
-    }
 }

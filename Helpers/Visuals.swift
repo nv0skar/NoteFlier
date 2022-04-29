@@ -22,8 +22,8 @@ class Visuals {
     class Views {
         struct DopeBackground: View {
             let emojis2Draw = 6
-            let emojiSize = CGFloat(58)
-            
+            let emojiSize: CGFloat = 58
+                        
             @State var emojiScale: CGFloat = 0
             @State var hapticFeedback = false
             
@@ -31,22 +31,22 @@ class Visuals {
                 GeometryReader { viewInfo in
                     ForEach((0...emojis2Draw), id: \.self) { count in
                         Text(["🎧", "🔈", "🎹", "🎛️", "🎙️", "🎸", "🎺", "🎷"].randomElement()!)
-                            .font(Font.system(size: emojiSize))
+                            .font(Font.system(size: CGFloat.random(in: (emojiSize-6)...(emojiSize+6))))
                             .rotationEffect(Angle(radians: Double(Float.random(in: -1.6...1.6))))
                             .position(
-                                x: CGFloat.random(in: emojiSize...viewInfo.size.width-emojiSize),
+                                x: CGFloat.random(in: CGFloat(emojiSize)...(viewInfo.size.width-CGFloat(emojiSize))),
                                 y: CGFloat(count*(Int(viewInfo.size.height)/emojis2Draw))
                             )
                             .glow(12)
                             .scaleEffect(emojiScale)
                             .onAppear() {
                                 withAnimation(Animation.spring(dampingFraction: 0.6)) {
-                                    emojiScale = CGFloat.random(in: 0.9...1.1)
+                                    emojiScale = CGFloat.random(in: 1.0...1.1)
                                 }
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
                                     if !hapticFeedback {
                                         hapticFeedback.toggle()
-                                        let impactFeedbackgenerator = UIImpactFeedbackGenerator(style: .rigid)
+                                        let impactFeedbackgenerator = UIImpactFeedbackGenerator(style: .medium)
                                         impactFeedbackgenerator.impactOccurred()
                                     }
                                 }
