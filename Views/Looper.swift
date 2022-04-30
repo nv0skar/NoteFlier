@@ -31,10 +31,10 @@ struct Looper: View {
         GeometryReader { viewInfo in
             ZStack {
                 ZStack {
-                    RoundedRectangle(cornerRadius: 54)
+                    RoundedRectangle(cornerRadius: (UIScreen.main.value(forKey: "_displayCornerRadius") as! CGFloat))
                         .trim(from: 0, to: CGFloat(recordingStatusIndicatorProgress))
                         .stroke(Color.red, lineWidth: 6.0)
-                        .frame(width: (viewInfo.size.height+(viewInfo.safeAreaInsets.top+viewInfo.safeAreaInsets.bottom)), height: (viewInfo.size.width+(viewInfo.safeAreaInsets.leading+viewInfo.safeAreaInsets.trailing)), alignment: .center)
+                        .frame(width: UIScreen.main.bounds.height, height: UIScreen.main.bounds.width, alignment: .center)
                         .padding(.all, 2.0)
                         .opacity(0.75)
                         .glow(12)

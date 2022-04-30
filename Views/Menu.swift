@@ -44,46 +44,48 @@ struct Menu: View {
                             .glow(8)
                             .shadow(radius: 4)
                     )
-                    .padding([.top], 32)
-                    .padding([.bottom], (viewInfo.size.height*0.6))
+                    .padding([.top, .bottom], 64)
+                Spacer()
                 VStack {
-                    Button(action: {
-                        if !looper { looper.toggle() }
-                    }, label: {
-                        Text("Looper!")
-                            .fontWeight(.heavy)
-                            .font(Font.system(size: 26))
-                            .shadow(color: Color.black, radius: 1, x: -1, y: -1)
-                            .blendMode(.exclusion)
-                            .shiny(Gradient(colors: Visuals.Utils.createRandomArrayColors(6, appendColors: [
-                                Color(red: (234/255), green: (63/255), blue: (63/255), opacity: 1),
-                                Color(red: (255/255), green: 0, blue: (101/255), opacity: 1),
-                            ])))
-                            .background(
-                                RoundedRectangle(cornerRadius: 32.0)
-                                    .frame(width: 180.0, height: 60.0)
-                                    .shiny(.matte((colorScheme == .light) ? (UIColor(red: (45/255), green: (50/255), blue: (100/255), alpha: 1)):(UIColor.white)))
-                                    .shadow(radius: 4)
-                            )
-                    })
-                    Spacer(minLength: 42)
-                    Button(action: {
-                        if !intro { intro.toggle() }
-                    }, label: {
-                        Text("🏗 OnionWaves 🏗")
-                            .fontWeight(.heavy)
-                            .font(Font.system(size: 22, design: .rounded))
-                            .shadow(color: Color.black, radius: 1, x: -1, y: -1)
-                            .foregroundColor((colorScheme == .light) ? Color(UIColor.black):Color(UIColor.white))
-                            .blendMode(.exclusion)
-                            .shiny(.hyperGlossy(.cyan))
-                            .background(
-                                RoundedRectangle(cornerRadius: 32.0)
-                                    .frame(width: 240.0, height: 60.0)
-                                    .shiny(.glossy((colorScheme == .light) ? (UIColor.yellow):(UIColor.purple)))
-                                    .shadow(radius: 4)
-                            )
-                    })
+                    VStack {
+                        Button(action: {
+                            if !looper { looper.toggle() }
+                        }, label: {
+                            Text("Looper!")
+                                .fontWeight(.heavy)
+                                .font(Font.system(size: 26))
+                                .shadow(color: Color.black, radius: 1, x: -1, y: -1)
+                                .blendMode(.exclusion)
+                                .shiny(Gradient(colors: Visuals.Utils.createRandomArrayColors(6, appendColors: [
+                                    Color(red: (234/255), green: (63/255), blue: (63/255), opacity: 1),
+                                    Color(red: (255/255), green: 0, blue: (101/255), opacity: 1),
+                                ])))
+                                .background(
+                                    RoundedRectangle(cornerRadius: 32.0)
+                                        .frame(width: 180.0, height: 60.0)
+                                        .shiny(.matte((colorScheme == .light) ? (UIColor(red: (45/255), green: (50/255), blue: (100/255), alpha: 1)):(UIColor.white)))
+                                        .shadow(radius: 4)
+                                )
+                        })
+                        .padding(.bottom, 52)
+                        Button(action: {
+                            if !intro { intro.toggle() }
+                        }, label: {
+                            Text("🏗 OnionWaves 🏗")
+                                .fontWeight(.heavy)
+                                .font(Font.system(size: 22, design: .rounded))
+                                .shadow(color: Color.black, radius: 1, x: -1, y: -1)
+                                .foregroundColor((colorScheme == .light) ? Color(UIColor.black):Color(UIColor.white))
+                                .blendMode(.exclusion)
+                                .shiny(.hyperGlossy(.cyan))
+                                .background(
+                                    RoundedRectangle(cornerRadius: 32.0)
+                                        .frame(width: 240.0, height: 60.0)
+                                        .shiny(.glossy((colorScheme == .light) ? (UIColor.yellow):(UIColor.purple)))
+                                        .shadow(radius: 4)
+                                )
+                        })
+                    }
                     Spacer()
                     Button(action: {
                         if !recordings { recordings.toggle() }
@@ -95,6 +97,7 @@ struct Menu: View {
                     })
                     .frame(maxWidth: .infinity)
                 }
+                .frame(maxHeight: (viewInfo.size.height*0.35))
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
             .padding()

@@ -15,6 +15,7 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import SwiftUI
+import SlideOverCard
 import Presentation
 
 struct OrchestratorDelegate: View {
@@ -25,14 +26,18 @@ struct OrchestratorDelegate: View {
     var body: some View {
         ZStack {
             Menu(intro: $intro, looper: $looper, recordings: $recordings)
-            Eggs.Intro(show: $intro) .onAppear() {
-                if !(Commons.defaults.bool(forKey: "introPresented")) && intro {
-                    Commons.defaults.set(true, forKey: "introPresented")
-                }
-            }
         }
         .present(isPresented: $looper, transition: .crossDissolve, style: .fullScreen, content: { Looper() })
         .present(isPresented: $recordings, content: { Recordings() })
+        .present(isPresented: $intro, style: .overFullScreen, content: {
+            Eggs.Intro(show: $intro)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .onAppear() {
+                    if !(Commons.defaults.bool(forKey: "introPresented")) && intro {
+                        Commons.defaults.set(true, forKey: "introPresented")
+                    }
+            }
+        })
         .background(Visuals.Views.DopeBackground())
     }
 }

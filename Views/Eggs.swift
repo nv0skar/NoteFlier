@@ -37,13 +37,15 @@ struct Eggs {
                         ZStack {
                             RoundedRectangle(cornerRadius: 25.0, style: .continuous).shiny(Gradient(colors: [Color(UIColor(red: (70/255), green: (60/255), blue: (110/255), alpha: 1)), Color(UIColor(red: (50/255), green: (50/255), blue: (90/255), alpha: 1))]))
                                 ScrollView {
-                                    ForEach(Fixed.Eggs.Intro.features, id: \.self) { intro in
-                                        HStack {
-                                            Text("\(Image(systemName: intro.icon))").fontWeight(.heavy).font(Font.system(size:24))
-                                                .frame(width: 56, height: 56, alignment: .center).foregroundColor(.white)
-                                            Text(intro.text).fontWeight(.bold).font(Font.system(size: 16, design: .rounded)).foregroundColor(.white).frame(maxWidth: .infinity, alignment: .leading)
+                                    VStack {
+                                        ForEach(Fixed.Eggs.Intro.features, id: \.self) { intro in
+                                            HStack {
+                                                Text("\(Image(systemName: intro.icon))").fontWeight(.heavy).font(Font.system(size:24))
+                                                    .frame(width: 56, height: 56, alignment: .center).foregroundColor(.white)
+                                                Text(intro.text).fontWeight(.bold).font(Font.system(size: 16, design: .rounded)).foregroundColor(.white).frame(maxWidth: .infinity, alignment: .leading)
+                                            }
+                                            if !(intro == Fixed.Eggs.Intro.features[Fixed.Eggs.Intro.features.count-1]) { Divider() }
                                         }
-                                        if !(intro == Fixed.Eggs.Intro.features[Fixed.Eggs.Intro.features.count-1]) { Divider() }
                                     }
                                 } .padding(24)
                             }
