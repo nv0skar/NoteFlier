@@ -20,6 +20,9 @@ import SwiftUI
 
 struct Looper: View {
     @Environment(\.dismiss) var dismiss
+    
+    @State var isPresented: Binding<Bool>
+    
     @State var isRecording: Bool = false
     @State var recordingStatusIndicatorProgress: Float = 0
     @State var recordingStatusIndicatorProgressRising: Bool = true
@@ -34,7 +37,7 @@ struct Looper: View {
                     RoundedRectangle(cornerRadius: (UIScreen.main.value(forKey: "_displayCornerRadius") as! CGFloat))
                         .trim(from: 0, to: CGFloat(recordingStatusIndicatorProgress))
                         .stroke(Color.red, lineWidth: 6.0)
-                        .frame(width: UIScreen.main.bounds.height, height: UIScreen.main.bounds.width, alignment: .center)
+                        .frame(width: (viewInfo.size.height+(viewInfo.safeAreaInsets.top+viewInfo.safeAreaInsets.bottom)), height: (viewInfo.size.width+(viewInfo.safeAreaInsets.leading+viewInfo.safeAreaInsets.trailing)), alignment: .center)
                         .padding(.all, 2.0)
                         .opacity(0.75)
                         .glow(12)
@@ -66,14 +69,13 @@ struct Looper: View {
                                     .foregroundColor(((!isRecording) ? Color.white:Color(red: 0.8, green: 0.8, blue: 0.8)))
                                     .frame(width: 42, height: 42, alignment: .center)
                             )
-                            .onTapGesture { if !isRecording { Scene.engine.stopEngine(); dismiss() } }
+                            .onTapGesture { if !isRecording { Scene.engine.stopEngine(); dismiss(); isPresented.wrappedValue = false } }
                             Spacer()
                             Text("\(Image(systemName: ((isRecording) ? "record.circle.fill":"record.circle")))").fontWeight(.heavy).font(Font.system(size:24)).frame(width: 32, height: 32, alignment: .center).foregroundColor(((!isRecording) ? Color.accentColor:Color.red)).background(
                                 RoundedRectangle(cornerRadius: 14.0)
                                     .foregroundColor(.white)
                                     .frame(width: 42, height: 42, alignment: .center)
-                                    .glow(((isRecording) ? 4:1)
-                                         )
+                                    .glow(((isRecording) ? 4:1))
                                     .onTapGesture {
                                         if (!isRecording) {
                                             Scene.engine.endRecordingEvent = {
@@ -88,7 +90,7 @@ struct Looper: View {
                                     })
                         }
                         .frame(maxWidth: 82)
-                        .padding([.top], viewInfo.safeAreaInsets.top)
+                        .padding([.top], (12+viewInfo.safeAreaInsets.top))
                         .padding([.trailing])
                     }
                     Spacer()

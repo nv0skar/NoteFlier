@@ -20,7 +20,7 @@ import SwiftUI
 
 class Audio {
     static let twoPi = (2*Float.pi)
-    static let maxFrequency: Float = 280
+    static let maxFrequency: Float = 560
     static let minFrequency: Float = 20.6
     
     public struct waves {

@@ -37,7 +37,7 @@ struct Menu: View {
                     .background(
                         RoundedRectangle(cornerRadius: 14.0)
                             .frame(width: 280, height: 80.0)
-                            .shiny(Gradient(colors: Visuals.Utils.createRandomArrayColors(6, appendColors: [
+                            .shiny(Gradient(colors: Visuals.Extras.createRandomArrayColors(6, appendColors: [
                                 Color(red: (234/255), green: (63/255), blue: (63/255), opacity: 1),
                                 Color(red: (255/255), green: 0, blue: (101/255), opacity: 1),
                             ])))
@@ -48,15 +48,13 @@ struct Menu: View {
                 Spacer()
                 VStack {
                     VStack {
-                        Button(action: {
-                            if !looper { looper.toggle() }
-                        }, label: {
+                        Button(action: { looper.toggle() }, label: {
                             Text("Looper!")
                                 .fontWeight(.heavy)
                                 .font(Font.system(size: 26))
                                 .shadow(color: Color.black, radius: 1, x: -1, y: -1)
                                 .blendMode(.exclusion)
-                                .shiny(Gradient(colors: Visuals.Utils.createRandomArrayColors(6, appendColors: [
+                                .shiny(Gradient(colors: Visuals.Extras.createRandomArrayColors(6, appendColors: [
                                     Color(red: (234/255), green: (63/255), blue: (63/255), opacity: 1),
                                     Color(red: (255/255), green: 0, blue: (101/255), opacity: 1),
                                 ])))
@@ -68,9 +66,7 @@ struct Menu: View {
                                 )
                         })
                         .padding(.bottom, 52)
-                        Button(action: {
-                            if !intro { intro.toggle() }
-                        }, label: {
+                        Button(action: { intro.toggle() }, label: {
                             Text("🏗 OnionWaves 🏗")
                                 .fontWeight(.heavy)
                                 .font(Font.system(size: 22, design: .rounded))
@@ -87,9 +83,7 @@ struct Menu: View {
                         })
                     }
                     Spacer()
-                    Button(action: {
-                        if !recordings { recordings.toggle() }
-                    }, label: {
+                    Button(action: { recordings.toggle() }, label: {
                         Text("Saved Loops")
                             .fontWeight(.bold)
                             .font(Font.system(size: 18))

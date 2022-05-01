@@ -27,7 +27,7 @@ struct OrchestratorDelegate: View {
         ZStack {
             Menu(intro: $intro, looper: $looper, recordings: $recordings)
         }
-        .present(isPresented: $looper, transition: .crossDissolve, style: .fullScreen, content: { Looper() })
+        .present(isPresented: $looper, transition: .crossDissolve, style: .fullScreen, content: { Looper(isPresented: $looper) })
         .present(isPresented: $recordings, content: { Recordings() })
         .present(isPresented: $intro, style: .overFullScreen, content: {
             Eggs.Intro(show: $intro)
@@ -38,6 +38,6 @@ struct OrchestratorDelegate: View {
                     }
             }
         })
-        .background(Visuals.Views.DopeBackground())
+        .background(Visuals.Views.DopeBackground().background(Color(red: (8/255), green: (12/255), blue: (20/255))))
     }
 }

@@ -46,8 +46,8 @@ class Visuals {
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
                                     if !hapticFeedback {
                                         hapticFeedback.toggle()
-                                        let impactFeedbackgenerator = UIImpactFeedbackGenerator(style: .medium)
-                                        impactFeedbackgenerator.impactOccurred()
+                                        Utils.hapticImpulse(.medium)
+                                        
                                     }
                                 }
                             }
@@ -70,7 +70,7 @@ class Visuals {
         }
     }
     
-    class Utils {
+    class Extras {
         static func createRandomArrayColors(_ count: Int, appendColors: [Color]? = nil) -> [Color] {
             var colors: [Color] = []
             if let toAppend = appendColors { colors.append(contentsOf: toAppend) }
@@ -88,7 +88,7 @@ extension View {
             if blur != 0 {
                 ForEach(0..<2) { i in
                     Rectangle()
-                        .fill(AngularGradient(gradient: Gradient(colors: Visuals.Utils.createRandomArrayColors(2)), center: .center))
+                        .fill(AngularGradient(gradient: Gradient(colors: Visuals.Extras.createRandomArrayColors(2)), center: .center))
                         .mask(self.blur(radius: CGFloat(blur)))
                         .overlay(self.blur(radius: CGFloat(blur-(Float(i)*blur))))
                 }
