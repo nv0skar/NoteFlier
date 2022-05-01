@@ -58,6 +58,7 @@ class Audio {
     }
     
     private let engine = AVAudioEngine()
+    private var postSource: AVAudioUnitEQ
     private var mixer: AVAudioMixerNode
     private var output: AVAudioOutputNode
     private var outputFormat: AVAudioFormat
@@ -86,6 +87,7 @@ class Audio {
     private var liveRecordingShared: Data.Recording? = nil
     
     init() {
+        postSource = AVAudioUnitEQ(numberOfBands: 1)
         mixer = engine.mainMixerNode
         output = engine.outputNode
         outputFormat = output.inputFormat(forBus: 0)
@@ -118,26 +120,29 @@ class Audio {
     
     public func start() {
         engine.attach(audioSource)
+        engine.attach(postSource)
         engine.attach(AUReverb)
         engine.attach(AUDelay)
         engine.attach(AUDistorsion)
         engine.attach(AUeQ)
-        engine.connect(audioSource, to: AUReverb, format: inputFormat)
+        engine.connect(audioSource, to: postSource, format: inputFormat)
+        engine.connect(postSource, to: AUReverb, format: inputFormat)
         engine.connect(AUReverb, to: AUDelay, format: outputFormat)
         engine.connect(AUDelay, to: AUeQ, format: outputFormat)
         // engine.connect(AUDistorsion, to: nil, format: inputFormat)
         engine.connect(AUeQ, to: mixer, format: outputFormat)
         engine.connect(mixer, to: output, format: outputFormat)
-        mixer.outputVolume = 0
+        mixer.outputVolume = 0.25
+        postSource.globalGain = 0
         try! engine.start()
     }
     
     public func resume() {
-        mixer.outputVolume = 0.25
+        postSource.globalGain = 0
     }
     
     public func pause() {
-        mixer.outputVolume = 0
+        postSource.globalGain = -96
     }
     
     public func setReverb(_ effect: Data.AudioEffects.Reverb) {

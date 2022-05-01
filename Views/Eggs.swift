@@ -28,12 +28,9 @@ struct Eggs {
                 ZStack {
                     VStack(alignment: .center, spacing: 25) {
                         VStack {
-                            Text(Fixed.Eggs.Intro.title).font(.system(size: 32, weight: .bold))
-                                .multilineTextAlignment(.center)
-                            Text(Fixed.Eggs.Intro.subtitle)
-                                .multilineTextAlignment(.center)
+                            Text(Fixed.Eggs.Intro.title).font(.system(size: 32, weight: .bold)).multilineTextAlignment(.center)
+                            Text(Fixed.Eggs.Intro.subtitle).multilineTextAlignment(.center)
                         }
-                        
                         ZStack {
                             RoundedRectangle(cornerRadius: 25.0, style: .continuous).shiny(Gradient(colors: [Color(UIColor(red: (70/255), green: (60/255), blue: (110/255), alpha: 1)), Color(UIColor(red: (50/255), green: (50/255), blue: (90/255), alpha: 1))]))
                                 ScrollView {
@@ -49,7 +46,6 @@ struct Eggs {
                                     }
                                 } .padding(24)
                             }
-                        
                         VStack(spacing: 0) {
                             Button("Let's go!", action: { show.toggle() }).buttonStyle(SOCActionButton())
                         }

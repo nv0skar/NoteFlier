@@ -46,8 +46,9 @@ struct Recordings: View {
                         ForEach(Array(recordings), id: \.self) { recording in
                             VStack {
                                 HStack {
-                                    Text("\(recording.name2Show)").bold().frame(width: (viewInfo.size.width*0.25), height: 56, alignment: .center)
-                                    Text("\(recording.path)").font(Font.system(size: 12, design: .monospaced)).frame(maxWidth: .infinity, alignment: .leading)
+                                    Text("\(recording.name2Show)").bold().frame(minWidth: (viewInfo.size.width*0.4), alignment: .leading).padding([.trailing], 8)
+                                    Divider()
+                                    Text("\(recording.path)").font(Font.system(size: 12, design: .monospaced)).frame(maxWidth: .infinity, alignment: .leading).padding([.leading], 8)
                                 }
                                 .onTapGesture() {
                                     let sheetWindow = (UIApplication.shared.connectedScenes.first { $0.activationState == .foregroundActive } as? UIWindowScene)?.windows.filter(\.isKeyWindow).first
@@ -55,11 +56,9 @@ struct Recordings: View {
                                     sheetController?.present(UIActivityViewController(activityItems: [recording.path], applicationActivities: nil), animated: true)
                                     }
                                 }
-                                if !(recording == recordings[recordings.count-1]) { Divider() }
-                            }
-                            .padding()
-                            .frame(maxWidth: .infinity, alignment: .center)
-                        } .padding([.trailing, .trailing], 62)
+                            if !(recording == recordings[recordings.count-1]) { Divider() }
+                            }.padding([.trailing, .leading])
+                        }
                     }
                 }
             }

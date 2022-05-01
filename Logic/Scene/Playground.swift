@@ -68,7 +68,7 @@ class Playground: SKScene {
     private func setRandomWave() {
         let randomOption = Int.random(in: 0...4)
         switch randomOption {
-            // case 0: engine.setWave(Audio.waves.sine)
+            case 0: engine.setWave(Audio.waves.sine)
             case 1: engine.setWave(Audio.waves.sawtoothUp)
             case 2: engine.setWave(Audio.waves.sawtoothDown)
             case 3: engine.setWave(Audio.waves.square)
