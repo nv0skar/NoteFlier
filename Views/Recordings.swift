@@ -24,8 +24,8 @@ struct Recordings: View {
 
     @State var recordings = Data.Recording.Operations.getRecordings()
     
-    @State var exportView = false
-        
+    @State var deleteAlert = false
+            
     var body: some View {
         GeometryReader { viewInfo in
             VStack {
@@ -45,7 +45,7 @@ struct Recordings: View {
                                         Text("\(recording.name2Show)").foregroundColor(.white).fontWeight(.heavy).blendMode(.difference)
                                         Spacer()
                                         ZStack {
-                                            RoundedRectangle(cornerRadius: 12.0, style: .continuous).shiny(.hyperGlossy(.gray)).frame(maxWidth: 96)
+                                            RoundedRectangle(cornerRadius: 12.0, style: .continuous).shiny(.hyperGlossy(.gray)).frame(maxWidth: 96).allowsHitTesting(false)
                                             HStack {
                                                 Button(action: { Files.export(recording.path) }, label: {
                                                     Image(systemName: "square.and.arrow.up")
@@ -53,13 +53,22 @@ struct Recordings: View {
                                                         .scaledToFit()
                                                         .blendMode(.difference)
                                                 }).frame(width: 24, height: 24).padding(8)
-                                                Button(action: { Data.Recording.Operations.deleteRecording(recording); recordings = Data.Recording.Operations.getRecordings() }, label: {
+                                                Button(action: { deleteAlert = true }, label: {
                                                     Image(systemName: "trash")
                                                         .resizable()
                                                         .scaledToFit()
                                                         .foregroundColor(.red)
                                                         .blendMode(.difference)
                                                 }).frame(width: 24, height: 24).padding(8)
+                                                    .alert("Are you sure you want to delete \(recording.name2Show)?", isPresented: $deleteAlert, actions: {
+                                                        Button("Nope", role: .cancel) {
+                                                            deleteAlert = false
+                                                        }
+                                                        Button("Yeah", role: .destructive) {
+                                                            Data.Recording.Operations.deleteRecording(recording); recordings = Data.Recording.Operations.getRecordings()
+                                                            deleteAlert = false
+                                                        }
+                                                })
                                             }
                                         }
                                     }.padding()
