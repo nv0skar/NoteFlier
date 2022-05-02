@@ -84,7 +84,7 @@ class Audio {
     public var isRecording: Binding<Bool>? = nil
     public var endRecordingEvent: () -> Void = {}
     
-    private var liveRecordingShared: Data.Recording? = nil
+    private var liveRecordingShared: Data.Recording.Constructor? = nil
     
     init() {
         postSource = AVAudioUnitEQ(numberOfBands: 1)
@@ -190,7 +190,7 @@ class Audio {
         let outUrl = (FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0] as NSURL).appendingPathComponent(outFilename.appending(".m4a"))
         let outDirExists = try? outUrl!.deletingLastPathComponent().checkResourceIsReachable()
         if outDirExists != nil {
-            liveRecordingShared = Data.Recording(name2Show: outFilename, path: (outUrl!))
+            liveRecordingShared = Data.Recording.Constructor(name2Show: outFilename, path: outUrl!)
             var outputFormatSettings = mixer.outputFormat(forBus: 0).settings
             outputFormatSettings[AVLinearPCMIsNonInterleaved] = false
             outFile = try! AVAudioFile(forWriting: outUrl!, settings: outputFormatSettings)
@@ -207,7 +207,9 @@ class Audio {
     public func killRecording() {
         self.engine.mainMixerNode.removeTap(onBus: 0)
         self.isRecording?.wrappedValue = false
-        if let recording = liveRecordingShared { recordings.append(recording) }
+        if let recording = liveRecordingShared {
+            Data.Recording.Operations.saveRecording(recording)
+        }
         self.endRecordingEvent()
     }
     

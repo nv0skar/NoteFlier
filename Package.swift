@@ -40,7 +40,8 @@ let package = Package(
         .package(url: "https://github.com/omaralbeik/Drops.git", "1.0.0"..<"2.0.0"),
         .package(url: "https://github.com/nerdsupremacist/FancyScrollView.git", "0.1.4"..<"1.0.0"),
         .package(url: "https://github.com/SwiftUI-Plus/Presentation.git", "1.0.0"..<"2.0.0"),
-        .package(url: "https://github.com/joogps/SlideOverCard.git", "2.0.0"..<"3.0.0")
+        .package(url: "https://github.com/joogps/SlideOverCard.git", "2.0.0"..<"3.0.0"),
+        .package(url: "https://github.com/stephencelis/SQLite.swift.git", .branch("master"))
     ],
     targets: [
         .executableTarget(
@@ -51,7 +52,8 @@ let package = Package(
                 .product(name: "Drops", package: "drops"),
                 .product(name: "FancyScrollView", package: "fancyscrollview"),
                 .product(name: "Presentation", package: "presentation"),
-                .product(name: "SlideOverCard", package: "slideovercard")
+                .product(name: "SlideOverCard", package: "slideovercard"),
+                .product(name: "SQLite", package: "sqlite.swift")
             ],
             path: ".",
             exclude: ["README.md", "COPYING.txt"],

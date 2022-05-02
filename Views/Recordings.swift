@@ -24,22 +24,14 @@ struct Recordings: View {
 
     @State var exportView = false
     
+    let recordings = Data.Recording.Operations.getRecordings()
+    
     var body: some View {
         GeometryReader { viewInfo in
             VStack {
                 HStack {
                     Spacer()
-                    Button(action: { dismiss() }) {
-                        ZStack {
-                            Circle().fill(Color(white: ((colorScheme == .dark) ? 0.19 : 0.93)))
-                            Image(systemName: "xmark")
-                                .resizable()
-                                .scaledToFit()
-                                .font(Font.body.weight(.bold))
-                                .scaleEffect(0.416)
-                                .foregroundColor(Color(white: ((colorScheme == .dark) ? 0.62 : 0.51)))
-                        }
-                    }.frame(width: 28, height: 28).padding()
+                    Visuals.Views.CloseButton(whenPressed: { dismiss() })
                 }
                 FancyScrollView(title: "Recorded Loops", titleColor: ((colorScheme == .light) ? Color.black:Color.white), scrollUpHeaderBehavior: .parallax, scrollDownHeaderBehavior: .sticky) {
                     VStack {
@@ -49,13 +41,8 @@ struct Recordings: View {
                                     Text("\(recording.name2Show)").bold().frame(minWidth: (viewInfo.size.width*0.4), alignment: .leading).padding([.trailing], 8)
                                     Divider()
                                     Text("\(recording.path)").font(Font.system(size: 12, design: .monospaced)).frame(maxWidth: .infinity, alignment: .leading).padding([.leading], 8)
-                                }
-                                .onTapGesture() {
-                                    let sheetWindow = (UIApplication.shared.connectedScenes.first { $0.activationState == .foregroundActive } as? UIWindowScene)?.windows.filter(\.isKeyWindow).first
-                                    let sheetController = sheetWindow?.rootViewController?.presentedViewController ?? sheetWindow?.rootViewController
-                                    sheetController?.present(UIActivityViewController(activityItems: [recording.path], applicationActivities: nil), animated: true)
-                                    }
-                                }
+                                }.onTapGesture() { Export.share(recording.path) }
+                            }
                             if !(recording == recordings[recordings.count-1]) { Divider() }
                             }.padding([.trailing, .leading])
                         }

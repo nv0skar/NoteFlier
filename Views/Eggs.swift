@@ -50,7 +50,7 @@ struct Eggs {
                             Button("Let's go!", action: { show.toggle() }).buttonStyle(SOCActionButton())
                         }
                         .padding([.bottom], 12)
-                    } .frame(maxHeight: 660)
+                    } .frame(maxHeight: 540)
                 }
             }
         }

@@ -16,11 +16,33 @@
 
 import Foundation
 import AVFAudio
+import SQLite
 
 class Data {
-    struct Recording: Hashable {
-        let name2Show: String
-        let path: URL
+    class Recording {
+        static let dbTable = Table("recordings")
+        
+        static var name2Show = Expression<String>("name2Show")
+        static var path = Expression<String>("path")
+        
+        struct Constructor: Hashable {
+            let name2Show: String
+            let path: URL
+        }
+        
+        class Operations {
+            static func getRecordings() -> [Constructor] {
+                var recordings: [Constructor] = []
+                for recording in try! Commons.db.connection.prepare(dbTable) {
+                    recordings.append(Constructor(name2Show: recording[name2Show], path: URL(string: "\(recording[path])")!))
+                }; return recordings
+            }
+            
+            static func saveRecording(_ recording: Constructor) {
+                let toInsert = dbTable.insert(name2Show <- recording.name2Show, path <- recording.path.absoluteString)
+                let _ = try! Commons.db.connection.run(toInsert)
+            }
+        }
     }
     
     class AudioEffects {

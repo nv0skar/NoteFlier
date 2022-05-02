@@ -20,6 +20,26 @@ import Drops
 
 class Visuals {
     class Views {
+        struct CloseButton: View {
+            @Environment(\.colorScheme) var colorScheme
+            
+            var whenPressed: (() -> ())
+            
+            var body: some View {
+                Button(action: { whenPressed() }) {
+                    ZStack {
+                        Circle().fill(Color(white: ((colorScheme == .dark) ? 0.19 : 0.93)))
+                        Image(systemName: "xmark")
+                            .resizable()
+                            .scaledToFit()
+                            .font(Font.body.weight(.bold))
+                            .scaleEffect(0.416)
+                            .foregroundColor(Color(white: ((colorScheme == .dark) ? 0.62 : 0.51)))
+                    }
+                }.frame(width: 28, height: 28).padding()
+            }
+        }
+        
         struct DopeBackground: View {
             let emojis2Draw = 6
             let emojiSize: CGFloat = 58
