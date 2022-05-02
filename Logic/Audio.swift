@@ -60,10 +60,9 @@ class Audio {
     private let engine = AVAudioEngine()
     private var postSource: AVAudioUnitEQ
     private var mixer: AVAudioMixerNode
-    private var output: AVAudioOutputNode
-    private var outputFormat: AVAudioFormat
     public var sampleRate: Float
     private var inputFormat: AVAudioFormat
+    private var outputFormat: AVAudioFormat
     private var audioSource: AVAudioNode = AVAudioNode()
     private var currentPhase: Float = 0
     
@@ -89,8 +88,7 @@ class Audio {
     init() {
         postSource = AVAudioUnitEQ(numberOfBands: 1)
         mixer = engine.mainMixerNode
-        output = engine.outputNode
-        outputFormat = output.inputFormat(forBus: 0)
+        outputFormat = engine.outputNode.inputFormat(forBus: 0)
         sampleRate = Float(outputFormat.sampleRate)
         inputFormat = AVAudioFormat(commonFormat: outputFormat.commonFormat, sampleRate: outputFormat.sampleRate, channels: 1, interleaved: outputFormat.isInterleaved)!
         AUReverb = AVAudioUnitReverb()
@@ -131,7 +129,7 @@ class Audio {
         engine.connect(AUDelay, to: AUeQ, format: outputFormat)
         // engine.connect(AUDistorsion, to: nil, format: inputFormat)
         engine.connect(AUeQ, to: mixer, format: outputFormat)
-        engine.connect(mixer, to: output, format: outputFormat)
+        engine.connect(mixer, to: engine.outputNode, format: outputFormat)
         mixer.outputVolume = 0.25
         postSource.globalGain = 0
         try! engine.start()

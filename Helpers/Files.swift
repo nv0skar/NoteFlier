@@ -24,4 +24,11 @@ class Files {
         sheetController?.present(UIActivityViewController(activityItems: [file], applicationActivities: nil), animated: true)
         Utils.log("Recording (\(file.absoluteString)) exported!")
     }
+    
+    static func deleteFile(_ file: URL) {
+        do {
+            try FileManager.default.removeItem(at: file)
+            Utils.log("\(file.absoluteString) deleted!")
+        } catch {}
+    }
 }

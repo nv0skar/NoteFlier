@@ -35,12 +35,18 @@ class Data {
                 var recordings: [Constructor] = []
                 for recording in try! Commons.db.connection.prepare(dbTable) {
                     recordings.append(Constructor(name2Show: recording[name2Show], path: URL(string: "\(recording[path])")!))
-                }; return recordings
+                }; Utils.log("Recordings fetched!"); return recordings
             }
             
             static func saveRecording(_ recording: Constructor) {
                 let toInsert = dbTable.insert(name2Show <- recording.name2Show, path <- recording.path.absoluteString)
                 let _ = try! Commons.db.connection.run(toInsert); Utils.log("New recording (\(recording.name2Show)) saved!")
+            }
+            
+            static func deleteRecording(_ recording: Constructor) {
+                Files.deleteFile(recording.path)
+                let toDelete = dbTable.filter(name2Show == recording.name2Show)
+                let _ = try! Commons.db.connection.run(toDelete.delete()); Utils.log("Recordings (\(recording.name2Show)) deleted!");
             }
         }
     }

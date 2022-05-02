@@ -22,10 +22,10 @@ struct Recordings: View {
     @Environment(\.dismiss) var dismiss
     @Environment(\.colorScheme) var colorScheme
 
+    @State var recordings = Data.Recording.Operations.getRecordings()
+    
     @State var exportView = false
-    
-    let recordings = Data.Recording.Operations.getRecordings()
-    
+        
     var body: some View {
         GeometryReader { viewInfo in
             VStack {
@@ -41,7 +41,21 @@ struct Recordings: View {
                                     Text("\(recording.name2Show)").bold().frame(minWidth: (viewInfo.size.width*0.4), alignment: .leading).padding([.trailing], 8)
                                     Divider()
                                     Text("\(recording.path)").font(Font.system(size: 12, design: .monospaced)).frame(maxWidth: .infinity, alignment: .leading).padding([.leading], 8)
-                                }.onTapGesture() { Files.export(recording.path) }
+                                }
+                                HStack {
+                                    Spacer()
+                                    Button(action: { Files.export(recording.path) }, label: {
+                                        Image(systemName: "square.and.arrow.up")
+                                            .resizable()
+                                            .scaledToFit()
+                                    }).frame(width: 24, height: 24).padding(8)
+                                    Button(action: { Data.Recording.Operations.deleteRecording(recording); recordings = Data.Recording.Operations.getRecordings() }, label: {
+                                        Image(systemName: "trash")
+                                            .resizable()
+                                            .scaledToFit()
+                                            .foregroundColor(.red)
+                                    }).frame(width: 24, height: 24).padding(8)
+                                }
                             }
                             if !(recording == recordings[recordings.count-1]) { Divider() }
                             }.padding([.trailing, .leading])

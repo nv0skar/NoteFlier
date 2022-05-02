@@ -30,11 +30,10 @@ struct Main: App {
     @UIApplicationDelegateAdaptor(Delegate.self) var delegate
     
     var body: some Scene {
-        WindowGroup { OrchestratorDelegate().onAppear(perform: {
+        WindowGroup { OrchestratorDelegate().onAppear() {
             #if (DEBUG)
             Commons.console.isVisible = true
-            Commons.console.print("NoteFlier | Debugger")
             #endif
-        }) }
+        }}
     }
 }
