@@ -183,7 +183,14 @@ extension Nodes.Cursor {
     }
 }
 
-extension Nodes.Obstacles {    
+extension Nodes.Obstacles {
+    public func deleteAllObstacles(){
+        for obstacle in obstacles {
+            obstacle.removeFromParent()
+            self.obstacles.remove(obstacle)
+        }
+    }
+    
     public func collision(_ toCheck: CGRect) -> Bool {
         for obstacle in obstacles {
             if obstacle.frame.intersects(toCheck) && !obstacle.collided {

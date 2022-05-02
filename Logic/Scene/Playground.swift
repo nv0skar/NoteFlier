@@ -28,12 +28,10 @@ class Playground: SKScene {
     private var touchPosition: CGPoint? = nil
     
     private var canSpawnObstacle: Bool {
-        get {
-            if let isRecording = engine.isRecording {
-                return !isRecording.wrappedValue
-            } else {
-                return true
-            }
+        if let isRecording = engine.isRecording {
+            return !isRecording.wrappedValue
+        } else {
+            return true
         }
     }
     
@@ -147,7 +145,11 @@ class Playground: SKScene {
     override func update(_ currentTime: CFTimeInterval) {
         handleInput()
         if obstacles.collision(player.cursor.frame) { collision() }
-        if canSpawnObstacle { obstacles.spawn() }
+        if canSpawnObstacle { obstacles.spawn() } else {
+            if obstacles.obstacles.count != 0 {
+                obstacles.deleteAllObstacles()
+            }
+        }
         if let move = touchPosition {
             if Utils.Scene.Extras.touchCompliant(touch: move, position: player.cursor.position, size: player.cursor.size, frameWidth: (self.view?.frame.width)!) {
                 setFrequency(move.x)
