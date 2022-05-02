@@ -40,7 +40,7 @@ class Data {
             
             static func saveRecording(_ recording: Constructor) {
                 let toInsert = dbTable.insert(name2Show <- recording.name2Show, path <- recording.path.absoluteString)
-                let _ = try! Commons.db.connection.run(toInsert)
+                let _ = try! Commons.db.connection.run(toInsert); Utils.log("New recording (\(recording.name2Show)) saved!")
             }
         }
     }

@@ -135,6 +135,7 @@ class Audio {
         mixer.outputVolume = 0.25
         postSource.globalGain = 0
         try! engine.start()
+        Utils.log("Audio Engine started!")
     }
     
     public func resume() {
@@ -146,10 +147,12 @@ class Audio {
     }
     
     public func setReverb(_ effect: Data.AudioEffects.Reverb) {
+        Utils.log("Reverb filter will be adjusted... \(effect)")
         AUReverb.wetDryMix = effect.wetDryMix
     }
     
     public func setDelay(_ effect: Data.AudioEffects.Delay) {
+        Utils.log("Delay filter will be adjusted... \(effect)")
         AUDelay.delayTime = effect.delayTime
         AUDelay.feedback = effect.feedback
         AUDelay.lowPassCutoff = effect.lowPassCutoff
@@ -157,11 +160,13 @@ class Audio {
     }
     
     public func setDistorsion(_ effect: Data.AudioEffects.Distorsion) {
+        Utils.log("Distorsion filter will be adjusted... \(effect)")
         AUDistorsion.preGain = effect.preGain
         AUDistorsion.wetDryMix = effect.wetDryMix
     }
     
     public func setEQ(_ effect: Data.AudioEffects.EQ.Main) {
+        Utils.log("EQ filter will be adjusted... \(effect)")
         let eqPams: AVAudioUnitEQFilterParameters = AUeQ.bands.first! as AVAudioUnitEQFilterParameters
         let _ = eqPams
         eqPams.frequency = effect.bands.first!.frequency
@@ -184,6 +189,7 @@ class Audio {
     }
     
     public func record() {
+        Utils.log("Recording will start...")
         self.isRecording?.wrappedValue = true
         var outFile: AVAudioFile?
         let outFilename = String(UUID.init().uuidString)
@@ -205,11 +211,10 @@ class Audio {
     }
         
     public func killRecording() {
+        Utils.log("Recording will end...")
         self.engine.mainMixerNode.removeTap(onBus: 0)
         self.isRecording?.wrappedValue = false
-        if let recording = liveRecordingShared {
-            Data.Recording.Operations.saveRecording(recording)
-        }
+        if let recording = liveRecordingShared { Data.Recording.Operations.saveRecording(recording) }
         self.endRecordingEvent()
     }
     

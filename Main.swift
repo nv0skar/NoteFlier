@@ -33,7 +33,7 @@ struct Main: App {
         WindowGroup { OrchestratorDelegate().onAppear(perform: {
             #if (DEBUG)
             Commons.console.isVisible = true
-            Commons.console.print("NoteFlier - Debugger")
+            Commons.console.print("NoteFlier | Debugger")
             #endif
         }) }
     }

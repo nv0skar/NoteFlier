@@ -21,12 +21,13 @@ class Database {
     var connection: Connection
     
     init() {
-        connection = try! Connection("\((FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0] as NSURL).appendingPathComponent("./theDBThing.sqlite3")!)")
+        let dbPath = (FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0] as NSURL).appendingPathComponent("./theDBThing.sqlite3")!
+        connection = try! Connection("\(dbPath)")
         do {
             try connection.run(Data.Recording.dbTable.create { builder in
                 builder.column(Data.Recording.name2Show, unique: true)
                 builder.column(Data.Recording.path, unique: true)
             })
-        } catch {}
+        } catch {}; Utils.log("Connection to database at \(dbPath) established!")
     }
 }

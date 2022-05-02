@@ -17,10 +17,11 @@
 import Foundation
 import UIKit
 
-class Export {
-    static func share(_ file: URL) {
+class Files {
+    static func export(_ file: URL) {
         let sheetWindow = (UIApplication.shared.connectedScenes.first { $0.activationState == .foregroundActive } as? UIWindowScene)?.windows.filter(\.isKeyWindow).first
         let sheetController = sheetWindow?.rootViewController?.presentedViewController ?? sheetWindow?.rootViewController
         sheetController?.present(UIActivityViewController(activityItems: [file], applicationActivities: nil), animated: true)
+        Utils.log("Recording (\(file.absoluteString)) exported!")
     }
 }

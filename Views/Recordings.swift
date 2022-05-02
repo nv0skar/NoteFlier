@@ -41,7 +41,7 @@ struct Recordings: View {
                                     Text("\(recording.name2Show)").bold().frame(minWidth: (viewInfo.size.width*0.4), alignment: .leading).padding([.trailing], 8)
                                     Divider()
                                     Text("\(recording.path)").font(Font.system(size: 12, design: .monospaced)).frame(maxWidth: .infinity, alignment: .leading).padding([.leading], 8)
-                                }.onTapGesture() { Export.share(recording.path) }
+                                }.onTapGesture() { Files.export(recording.path) }
                             }
                             if !(recording == recordings[recordings.count-1]) { Divider() }
                             }.padding([.trailing, .leading])

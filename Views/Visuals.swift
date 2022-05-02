@@ -67,7 +67,6 @@ class Visuals {
                                     if !hapticFeedback {
                                         hapticFeedback.toggle()
                                         Utils.hapticImpulse(.medium)
-                                        
                                     }
                                 }
                             }

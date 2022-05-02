@@ -122,6 +122,7 @@ class Playground: SKScene {
         player.setScene(self)
         obstacles.setScene(self)
         background.setScene(self)
+        Utils.log("Playground loaded!")
     }
         
     override func didMove(to view: SKView) {

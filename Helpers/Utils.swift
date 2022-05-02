@@ -39,6 +39,12 @@ final class Utils {
         }
     }
     
+    static func log(_ message: String) {
+        #if (DEBUG)
+        print(message); Commons.console.print(message)
+        #endif
+    }
+    
     static func hapticImpulse(_ kind: UIImpactFeedbackGenerator.FeedbackStyle) {
         let impactFeedbackgenerator = UIImpactFeedbackGenerator(style: kind)
         impactFeedbackgenerator.impactOccurred()
