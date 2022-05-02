@@ -40,7 +40,7 @@ class Visuals {
             }
         }
         
-        struct DopeBackground: View {
+        struct DopeBackground: View {            
             let emojis2Draw = 6
             let emojiSize: CGFloat = 58
                         

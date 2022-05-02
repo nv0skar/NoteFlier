@@ -30,6 +30,7 @@ struct Menu: View {
         GeometryReader { viewInfo in
             VStack {
                 Text("NoteFlier")
+                    .foregroundColor(.white)
                     .fontWeight(.black)
                     .font(Font.system(size:48, design: .rounded))
                     .shadow(color: Color.black, radius: 1, x: -1, y: -1)
@@ -73,7 +74,10 @@ struct Menu: View {
                                 .shadow(color: Color.black, radius: 1, x: -1, y: -1)
                                 .foregroundColor((colorScheme == .light) ? Color(UIColor.black):Color(UIColor.white))
                                 .blendMode(.exclusion)
-                                .shiny(.hyperGlossy(.cyan))
+                                .shiny(Gradient(colors: Visuals.Extras.createRandomArrayColors(6, appendColors: [
+                                    Color(red: (234/255), green: (63/255), blue: (63/255), opacity: 1),
+                                    Color(red: (255/255), green: 0, blue: (101/255), opacity: 1),
+                                ])))
                                 .background(
                                     RoundedRectangle(cornerRadius: 32.0)
                                         .frame(width: 240.0, height: 60.0)

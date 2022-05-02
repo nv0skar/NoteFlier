@@ -190,8 +190,8 @@ class Audio {
         Utils.log("Recording will start...")
         self.isRecording?.wrappedValue = true
         var outFile: AVAudioFile?
-        let outFilename = String(UUID.init().uuidString)
-        let outUrl = (FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0] as NSURL).appendingPathComponent(outFilename.appending(".m4a"))
+        let outFilename = ("NewLoop at \(Date.now.formatted(date: .complete, time: .standard))")
+        let outUrl = (FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0] as NSURL).appendingPathComponent(outFilename.appending("_\(UUID.init().uuidString).m4a"))
         let outDirExists = try? outUrl!.deletingLastPathComponent().checkResourceIsReachable()
         if outDirExists != nil {
             liveRecordingShared = Data.Recording.Constructor(name2Show: outFilename, path: outUrl!)

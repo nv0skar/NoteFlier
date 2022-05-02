@@ -19,6 +19,8 @@ import SlideOverCard
 import Presentation
 
 struct OrchestratorDelegate: View {
+    @Environment(\.colorScheme) var colorScheme
+    
     @State private var intro = !(Commons.defaults.bool(forKey: "introPresented"))
     @State private var looper = false
     @State private var recordings = false
@@ -38,6 +40,6 @@ struct OrchestratorDelegate: View {
                     }
             }
         })
-        .background(Visuals.Views.DopeBackground().background(Color(red: (8/255), green: (12/255), blue: (20/255))))
+        .background(Visuals.Views.DopeBackground().background((colorScheme == .light) ? Color(red: (247/255), green: (243/255), blue: (235/255)):Color(red: (8/255), green: (12/255), blue: (20/255))))
     }
 }

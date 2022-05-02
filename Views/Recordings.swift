@@ -16,7 +16,7 @@
 
 import Foundation
 import SwiftUI
-import FancyScrollView
+import Shiny
 
 struct Recordings: View {
     @Environment(\.dismiss) var dismiss
@@ -33,35 +33,43 @@ struct Recordings: View {
                     Spacer()
                     Visuals.Views.CloseButton(whenPressed: { dismiss() })
                 }
-                FancyScrollView(title: "Recorded Loops", titleColor: ((colorScheme == .light) ? Color.black:Color.white), scrollUpHeaderBehavior: .parallax, scrollDownHeaderBehavior: .sticky) {
-                    VStack {
-                        ForEach(Array(recordings), id: \.self) { recording in
+                VStack {
+                    Text("Recorded Loops").font(.largeTitle).fontWeight(.black).frame(maxWidth: .infinity, alignment: .leading).padding([.leading, .trailing])
+                    ScrollView {
+                        ZStack {
+                            if (recordings.count != 0) { RoundedRectangle(cornerRadius: 12.0, style: .continuous).shiny(.iridescent) }
                             VStack {
-                                HStack {
-                                    Text("\(recording.name2Show)").bold().frame(minWidth: (viewInfo.size.width*0.4), alignment: .leading).padding([.trailing], 8)
-                                    Divider()
-                                    Text("\(recording.path)").font(Font.system(size: 12, design: .monospaced)).frame(maxWidth: .infinity, alignment: .leading).padding([.leading], 8)
-                                }
-                                HStack {
-                                    Spacer()
-                                    Button(action: { Files.export(recording.path) }, label: {
-                                        Image(systemName: "square.and.arrow.up")
-                                            .resizable()
-                                            .scaledToFit()
-                                    }).frame(width: 24, height: 24).padding(8)
-                                    Button(action: { Data.Recording.Operations.deleteRecording(recording); recordings = Data.Recording.Operations.getRecordings() }, label: {
-                                        Image(systemName: "trash")
-                                            .resizable()
-                                            .scaledToFit()
-                                            .foregroundColor(.red)
-                                    }).frame(width: 24, height: 24).padding(8)
+                                ForEach(Array(recordings), id: \.self) { recording in
+                                    if (recording == recordings[0]) { Spacer() }
+                                    HStack {
+                                        Text("\(recording.name2Show)").foregroundColor(.white).fontWeight(.heavy).blendMode(.difference)
+                                        Spacer()
+                                        ZStack {
+                                            RoundedRectangle(cornerRadius: 12.0, style: .continuous).shiny(.hyperGlossy(.gray)).frame(maxWidth: 96)
+                                            HStack {
+                                                Button(action: { Files.export(recording.path) }, label: {
+                                                    Image(systemName: "square.and.arrow.up")
+                                                        .resizable()
+                                                        .scaledToFit()
+                                                        .blendMode(.difference)
+                                                }).frame(width: 24, height: 24).padding(8)
+                                                Button(action: { Data.Recording.Operations.deleteRecording(recording); recordings = Data.Recording.Operations.getRecordings() }, label: {
+                                                    Image(systemName: "trash")
+                                                        .resizable()
+                                                        .scaledToFit()
+                                                        .foregroundColor(.red)
+                                                        .blendMode(.difference)
+                                                }).frame(width: 24, height: 24).padding(8)
+                                            }
+                                        }
+                                    }.padding()
+                                    if !(recording == recordings[recordings.count-1]) { Divider() } else { Spacer() }
                                 }
                             }
-                            if !(recording == recordings[recordings.count-1]) { Divider() }
-                            }.padding([.trailing, .leading])
                         }
-                    }
+                    }.padding([.trailing, .leading])
                 }
             }
         }
+    }
 }

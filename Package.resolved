@@ -11,15 +11,6 @@
         }
       },
       {
-        "package": "FancyScrollView",
-        "repositoryURL": "https://github.com/nerdsupremacist/FancyScrollView.git",
-        "state": {
-          "branch": null,
-          "revision": "7f8194b23dc209cdb5b0ebc9799a8de487166fdf",
-          "version": "0.1.4"
-        }
-      },
-      {
         "package": "LocalConsole",
         "repositoryURL": "https://github.com/duraidabdul/LocalConsole.git",
         "state": {
