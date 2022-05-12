@@ -10,7 +10,6 @@ I've made this app for the WWDC22's Swift Student Challenge 🤩
 
 ## <a name="development"></a>Development 🧑‍💻
 ### <a name="developmentTODO"></a>TODO 👽
-- [ ] Tidy up the code!
-- [ ] Save the recordings list to be able to export them later
+- [x] Save the recordings list to be able to export them later
 - [ ] Implement the *OnionWaves* feature
 - [ ] Add more effects
