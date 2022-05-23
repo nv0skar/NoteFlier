@@ -11,4 +11,4 @@ I've made this app for the WWDC22's Swift Student Challenge 🤩
 ## <a name="development"></a>Development 🧑‍💻
 ### <a name="developmentTODO"></a>TODO 👽
 - [ ] Implement the *OnionWaves* feature (Audio overlays)
-- [ ] Add more effects *(If you have any suggestions open a new issue!)*
+- [ ] Add more effects **(If you have any suggestions open a new issue!)**
