@@ -14,6 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+import AVFoundation
 import SwiftUI
 
 final class Delegate: UIResponder, UIApplicationDelegate {
@@ -31,6 +32,7 @@ struct Main: App {
     
     var body: some Scene {
         WindowGroup { OrchestratorDelegate().onAppear() {
+            try? AVAudioSession.sharedInstance().setCategory(.playback, mode: .default, options: [.allowAirPlay, .allowBluetooth, .allowBluetoothA2DP])
             #if (DEBUG)
             Commons.console.isVisible = true
             #endif
