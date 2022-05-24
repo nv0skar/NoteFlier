@@ -6,7 +6,7 @@
 NoteFlier a fancy tone generator that aims to be ~reallistic~ 🙂, generate ~good~ 🙃 sounds and provide musicians a tool to create random master pieces 🌈
 
 ## <a name="history"></a>History 🥹
-I've made this app for the WWDC22's Swift Student Challenge 🤩
+I've made this app for the WWDC22's Swift Student Challenge 🤩 **(It was rejected)**
 
 ## <a name="development"></a>Development 🧑‍💻
 ### <a name="developmentTODO"></a>TODO 👽
