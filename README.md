@@ -2,7 +2,7 @@
 
 <h4 align="center">Random creativity for your tracks 🎶</h4>
 
-## <a name="why"></a>What? 🐙
+## <a name="what"></a>What? 🐙
 NoteFlier a fancy tone generator that aims to be ~reallistic~ 🙂, generate ~good~ 🙃 sounds and provide musicians a tool to create random master pieces 🌈
 
 ## <a name="history"></a>History 🥹
