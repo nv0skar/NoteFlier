@@ -16,7 +16,7 @@ let package = Package(
         .iOSApplication(
             name: "NoteFlier",
             targets: ["AppModule"],
-            bundleIdentifier: "to.itstheguy.NoteFlier",
+            bundleIdentifier: "to.nv0skar.NoteFlier",
             teamIdentifier: "5Y5W2JVDEP",
             displayVersion: "0.1",
             bundleVersion: "1",
